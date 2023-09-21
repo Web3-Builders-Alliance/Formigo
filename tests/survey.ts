@@ -131,7 +131,7 @@ describe("survey", () => {
       .then(confirmTx);
   });
 
-  it("Create user!", async () => {
+  it("Create user account for author!", async () => {
     // Add your test here.
     // Signing a message
     const messageBytes = decodeUTF8(message);
