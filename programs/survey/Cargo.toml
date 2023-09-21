@@ -16,5 +16,8 @@ cpi = ["no-entrypoint"]
 default = []
 
 [dependencies]
-anchor-lang = "0.28.0"
+anchor-lang = {version = "0.28.0", features = ["init-if-needed"]}
 anchor-spl = "0.28.0"
+serde_json = "1.0.105"
+serde = "1.0.187"
+borsh = "0.10.3"
