@@ -277,6 +277,7 @@ describe("survey", () => {
         key
       );
       // Parse the decrypted data to JSON format
+      console.log('Decrypted data');
       console.log(JSON.parse(decryptData));
     } catch (error) {
       console.log(error);
