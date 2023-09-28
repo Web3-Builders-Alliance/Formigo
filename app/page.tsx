@@ -1,14 +1,12 @@
-import Footer from "@/components/Footer";
 import Landing from "@/components/Landing";
-import Landing2 from "@/components/Landing";
-import Navbar from "@/components/Navbar";
+import { Inter } from "next/font/google";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   return (
-    <main className="flex h-screen w-screen flex-col items-center">
-      <Navbar />
+    <main style={inter.style} className="flex justify-center w-full">
       <Landing />
-      <Footer />
     </main>
   );
 }
