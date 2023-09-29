@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const Navbar = () => {
+const LandingNavbar = () => {
   return (
     <div className="sm:h-36 flex w-5/6 items-center justify-between xs:h-24">
       <Link href="/" className="flex w-[14%] min-w-[10%] justify-start">
@@ -34,4 +34,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default LandingNavbar;
