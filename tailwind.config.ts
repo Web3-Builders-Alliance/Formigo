@@ -16,6 +16,9 @@ const config: Config = {
       colors: {
         "formigo-blue": "#0B44ED",
         "formigo-grey": "#D9D9D9",
+        "formigo-teal": "#40E0D0",
+        "formigo-orange": "#FF5500",
+        "formigo-lightOrange": "#FFE1D2"
       },
     },
     screens: {
