@@ -8,7 +8,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="flex h-screen w-screen flex-col border-2 justify-between items-center">
+      <body className="flex h-screen w-screen flex-col justify-between items-center">
         <HomeNavbar/>
         {children}
         <Footer/>
