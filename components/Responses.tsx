@@ -11,7 +11,7 @@ type UserResponse = {
   [question: string]: string | number | boolean
 };
 
-const Surveys = () => {
+const Responses = () => {
   const testInfo = [
     {
       surveyAddress: "Eo7541qr1MZsTDPAtypqjgEdx3APA87x3nyhGDNczeQC",
@@ -72,4 +72,4 @@ const Surveys = () => {
   );
 };
 
-export default Surveys;
+export default Responses;
