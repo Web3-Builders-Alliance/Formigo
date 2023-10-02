@@ -2,7 +2,7 @@ import Image from "next/image";
 
 function Footer() {
   return (
-    <div className="flex w-full flex-row items-center justify-center xs:h-24 sm:h-36 pt-4">
+    <div className="flex w-full flex-row items-center justify-center pt-4 xs:h-24 sm:h-36">
       <div className="flex flex-row items-center justify-center">
         <Image
           src="/formigo_logo.png"
