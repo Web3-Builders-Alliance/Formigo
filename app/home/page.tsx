@@ -13,10 +13,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const [viewSurvey, setViewSurvey] = useState(true);
-
-  const surveyView = (bool: boolean) => {
-    setViewSurvey(bool);
-  };
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <main
@@ -34,13 +31,13 @@ export default function Home() {
         </Link>
         <div className="flex items-center justify-start text-center font-semibold xs:w-1/2 xs:max-w-md xs:text-sm sm:w-8/12 sm:max-w-full sm:text-2xl">
           <button
-            onClick={() => surveyView(true)}
+            onClick={() => setViewSurvey(true)}
             className="rounded-xl p-4 text-center hover:bg-formigo-grey xs:w-fit sm:w-3/12"
           >
             Surveys
           </button>
           <button
-            onClick={() => surveyView(false)}
+            onClick={() => setViewSurvey(false)}
             className="rounded-xl p-4 text-center hover:bg-formigo-grey xs:w-fit sm:w-3/12"
           >
             Responses
@@ -50,7 +47,35 @@ export default function Home() {
           <div className="rounded-full bg-formigo-grey xs:h-[40px] xs:w-[40px] md:h-[60px] md:w-[60px]"></div>
         </div>
       </div>
-      {viewSurvey ? <Surveys /> : <Responses />}
+      <div className="h-[75vh] w-5/6">
+        <div className="w-full font-bold">
+          <div className="pb-8 pt-8 xs:text-2xl sm:text-4xl">
+            {viewSurvey ? "Surveys" : "Responses"}
+          </div>
+          <div className="flex h-full w-full xs:flex-col xs:items-center xs:justify-center sm:items-start md:flex-row md:justify-between">
+            <div className="flex h-full w-7/12 flex-col justify-start">
+              {viewSurvey ? <Surveys /> : <Responses />}
+            </div>
+            <div className="flex max-h-[500px] min-h-[500px] w-4/12 flex-col items-center justify-around rounded-xl border-formigo-teal p-4 sm:h-1/3 sm:border">
+              <p className=" w-5/6 pb-4 pt-4 text-center font-semibold xs:hidden sm:flex sm:text-4xl xl:text-5xl">
+                Ready to survey like a rockstar?
+              </p>
+              <p className="text-md w-5/6 pb-4 pt-4 text-center xs:hidden sm:flex xl:text-xl">
+                Give that button a tap, and let&apos;s craft a fresh, fabulous
+                survey together!
+              </p>
+              <button
+                onClick={() => {
+                  setIsOpen(true);
+                }}
+                className="rounded-xl bg-formigo-blue p-4 text-xl text-white xs:w-full sm:w-5/6 xl:w-3/6"
+              >
+                Create Survey
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       <Footer />
     </main>
   );
