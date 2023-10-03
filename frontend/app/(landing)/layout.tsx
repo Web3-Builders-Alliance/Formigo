@@ -16,9 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex h-screen w-screen flex-col items-center justify-between">
-        <LandingNavbar />
         {children}
-        <Footer />
       </body>
     </html>
   );

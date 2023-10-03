@@ -8,6 +8,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import Responses from "@/components/Responses";
+import CreateSurveyModal from "@/components/CreateSurveyModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -76,6 +77,9 @@ export default function Home() {
           </div>
         </div>
       </div>
+      {isOpen && (
+        <CreateSurveyModal isOpen={isOpen} handleClose={() => setIsOpen(!isOpen)}/>
+      )}
       <Footer />
     </main>
   );
