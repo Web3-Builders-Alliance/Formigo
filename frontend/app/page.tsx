@@ -1,13 +1,10 @@
-import { Inter } from "next/font/google";
-import Image from "next/image";
 
-const inter = Inter({ subsets: ["latin"], weight: ["400"] });
+import Image from "next/image";
 
 export default function Home() {
   return (
     <main
-      style={inter.style}
-      className="bg-formigo-darkgrey flex h-screen w-screen items-center justify-center"
+      className="font-sans bg-formigo-darkgrey flex h-screen w-screen items-center justify-center"
     >
       <div className="h-[40%] w-1/2 rounded-lg bg-formigo-grey">
         <div className=" flex h-full w-full flex-col items-start justify-start p-24 pt-16 text-white shadow-xl">
