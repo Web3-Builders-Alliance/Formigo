@@ -1,10 +1,21 @@
+import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 import type { Metadata } from "next";
+import {Inter, Montserrat} from "next/font/google"
 
 export const metadata: Metadata = {
   title: "Formigo",
   description: "",
 };
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+})
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  variable: '--font-montserrat',
+})
 
 export default function RootLayout({
   children,
@@ -13,8 +24,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="flex flex-col items-center justify-between h-screen">
-        {children}
+      <body className={`${inter.variable} ${montserrat.variable}`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

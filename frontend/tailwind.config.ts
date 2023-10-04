@@ -8,12 +8,29 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      fontFamily: {
+        sans: ["var(--font-inter)"],
+        serif: ["var(--font-montserrat)"],
       },
       colors: {
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+        border: "var(--border)",
+        card: 'var(--card)',
+        txt: {
+          DEFAULT: "var(--text-primary)",
+          secondary: "var(--text-secondary)"
+        },
+        btn: {
+          primary: "var(--btn-primary)",
+          "primary-hover": "var(--btn-primary-hover)",
+          secondary: "var(--btn-secondary)",
+        },
+
+        secondary: {
+          DEFAULT: "var(--secondary)",
+          foreground: "var(--secondary-foreground)",
+        },
         "formigo-blue": "#0A77FF",
         "formigo-grey": "#252525",
         "formigo-dark/base-3rd": "#2B2D2F",
@@ -23,7 +40,12 @@ const config: Config = {
         "formigo-bluegreen": "#537E81",
         "formigo-teal": "#40E0D0",
         "formigo-orange": "#FF5500",
-        "formigo-lightOrange": "#FFE1D2"
+        "formigo-lightOrange": "#FFE1D2",
+      },
+      borderRadius: {
+        lg: "calc(var(--radius) + 2px)",
+        md: "var(--radius)",
+        sm: "calc(var(--radius) - 2px)",
       },
     },
     screens: {
@@ -34,6 +56,6 @@ const config: Config = {
       xl: "1280px",
     },
   },
-  plugins: [],
+  plugins: [require("tailwindcss-animate")],
 };
 export default config;
