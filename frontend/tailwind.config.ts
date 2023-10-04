@@ -20,6 +20,7 @@ const config: Config = {
         "formigo-dark/stroke-base": "#323539",
         "formigo-dark/text-2nd": "#979AA0",
         "formigo-darkgrey": "#181818",
+        "formigo-bluegreen": "#537E81",
         "formigo-teal": "#40E0D0",
         "formigo-orange": "#FF5500",
         "formigo-lightOrange": "#FFE1D2"

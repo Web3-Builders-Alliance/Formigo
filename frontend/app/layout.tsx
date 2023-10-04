@@ -1,6 +1,4 @@
-import Footer from "@/components/Footer";
-import LandingNavbar from "@/components/LandingNavbar";
-import "../globals.css";
+import "./globals.css";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -15,7 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="flex h-screen w-screen flex-col items-center justify-between">
+      <body className="flex flex-col items-center justify-between h-screen">
         {children}
       </body>
     </html>
