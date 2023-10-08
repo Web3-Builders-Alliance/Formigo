@@ -1,0 +1,17 @@
+import PhatomIcon from "./icons/phantom";
+import { Button } from "./ui/button";
+
+export default function PhatomButton({
+  className,
+  onClick,
+}: {
+  className?: string;
+  onClick?: () => void;
+}) {
+  return (
+    <Button variant="outline" className={className} onClick={onClick}>
+      <PhatomIcon className="w-5 h-4 mr-2" />
+      Phantom wallet
+    </Button>
+  );
+}
