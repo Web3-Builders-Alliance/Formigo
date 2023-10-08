@@ -18,7 +18,10 @@ module.exports = {
         foreground: "var(--foreground)",
         border: "var(--border)",
         card: "var(--card)",
-        destructive: "var(--destructive)",
+        destructive:{
+          DEFAULT: "var(--destructive)",
+          foreground: "var(--destructive-foreground)",
+        } ,
         txt: {
           DEFAULT: "var(--text-primary)",
           secondary: "var(--text-secondary)",

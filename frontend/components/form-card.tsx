@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { IoEllipsisHorizontal } from "react-icons/io5";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
@@ -22,16 +22,31 @@ export default function FormCard() {
         <h1 className="font-sans text-xl">Formigo Feedback</h1>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="secondary">
+            <Button type="button" variant="secondary">
               <IoEllipsisHorizontal className="h-6 w-6" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56">
+          <DropdownMenuContent className="w-56 ">
             <DropdownMenuItem
-              className="font-sans"
+              className="font-sans text-base"
               onClick={() => router.push("/form/ecqwsx")}
             >
-              View Summary
+              Overview
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="font-sans text-base"
+              onClick={() => router.push("/form/ecqwsx/responses")}
+            >
+              Responses
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="font-sans text-base"
+              onClick={() => router.push("/form/ecqwsx/settings")}
+            >
+              Settings
+            </DropdownMenuItem>
+            <DropdownMenuItem className="font-sans text-base">
+              Share link
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

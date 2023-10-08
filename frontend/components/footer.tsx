@@ -28,13 +28,13 @@ function Footer() {
             <p className="text-white font-bold p-1">Product</p>
             <Link
               href="/features"
-              className="text-txt-secondary text-base w-fit p-1 rounded-lg hover:bg-formigo-dark/stroke-base"
+              className="text-txt-secondary text-base w-fit p-1 rounded-lg hover:underline"
             >
               Features
             </Link>
             <Link
               href="/integrations"
-              className="text-txt-secondary text-base  w-fit p-1 rounded-lg hover:bg-formigo-dark/stroke-base"
+              className="text-txt-secondary text-base  w-fit p-1 rounded-lg hover:underline"
             >
               Integrations
             </Link>
@@ -43,19 +43,19 @@ function Footer() {
             <p className="text-white text-xl font-bold p-1">Resources</p>
             <Link
               href="/community"
-              className="text-txt-secondary text-base  w-fit p-1 rounded-lg hover:bg-formigo-dark/stroke-base"
+              className="text-txt-secondary text-base  w-fit p-1 rounded-lg hover:underline"
             >
               Community
             </Link>
             <Link
               href="/blog"
-              className="text-txt-secondary text-base  w-fit p-1 rounded-lg hover:bg-formigo-dark/stroke-base"
+              className="text-txt-secondary text-base  w-fit p-1 rounded-lg hover:underline"
             >
               Blog
             </Link>
             <Link
               href="/faq"
-              className="text-txt-secondary text-base  w-fit p-1 rounded-lg hover:bg-formigo-dark/stroke-base"
+              className="text-txt-secondary text-base  w-fit p-1 rounded-lg hover:underline"
             >
               FAQ
             </Link>
