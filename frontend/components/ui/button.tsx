@@ -16,10 +16,12 @@ const buttonVariants = cva(
         secondary:
           "bg-btn-secondary border-border border text-txt-secondary- shadow-sm hover:bg-btn-secondary/80 hover:text-txt",
         ghost: "text-txt-secondary hover:bg-btn-secondary hover:text-txt",
+        "ghost-active": "bg-btn-secondary text-txt",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
         default: "px-4 py-2.5",
+        sm: "px-2 py-1.5",
         icon: "h-9 w-9",
       },
     },
