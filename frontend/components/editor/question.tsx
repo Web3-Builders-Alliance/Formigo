@@ -63,7 +63,7 @@ export default function Question({ index }: { index: number }) {
   return (
     <div className="w-[770px] bg-card border-border border p-4 font-sans rounded-md ring ring-transparent focus-within:ring-btn-primary duration-300 ease-in-out ">
       <div className="flex gap-2 items-center mb-6">
-        <div className="flex justify-center items-center h-[34px] w-[34px] text-sm rounded-full bg-btn-primary font-sans font-semibold">
+        <div className="flex justify-center items-center h-[34px] w-[36px] text-sm rounded-full bg-btn-primary font-sans font-semibold">
           {index}
         </div>
 
