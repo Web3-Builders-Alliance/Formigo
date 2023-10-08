@@ -1,10 +1,11 @@
-import type { Config } from "tailwindcss";
-
-const config: Config = {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  darkMode: ["class"],
   content: [
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
   theme: {
     extend: {
@@ -16,10 +17,11 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
         border: "var(--border)",
-        card: 'var(--card)',
+        card: "var(--card)",
+        destructive: "var(--destructive)",
         txt: {
           DEFAULT: "var(--text-primary)",
-          secondary: "var(--text-secondary)"
+          secondary: "var(--text-secondary)",
         },
         btn: {
           primary: "var(--btn-primary)",
@@ -42,20 +44,27 @@ const config: Config = {
         "formigo-orange": "#FF5500",
         "formigo-lightOrange": "#FFE1D2",
       },
-      borderRadius: {
-        lg: "calc(var(--radius) + 2px)",
-        md: "var(--radius)",
-        sm: "calc(var(--radius) - 2px)",
+    },
+    borderRadius: {
+      full: "9999px",
+      lg: "calc(var(--radius) + 2px)",
+      md: "var(--radius)",
+      sm: "calc(var(--radius) - 2px)",
+    },
+    keyframes: {
+      "accordion-down": {
+        from: { height: 0 },
+        to: { height: "var(--radix-accordion-content-height)" },
+      },
+      "accordion-up": {
+        from: { height: "var(--radix-accordion-content-height)" },
+        to: { height: 0 },
       },
     },
-    screens: {
-      xs: "280px",
-      sm: "640px",
-      md: "768px",
-      lg: "1024px",
-      xl: "1280px",
+    animation: {
+      "accordion-down": "accordion-down 0.2s ease-out",
+      "accordion-up": "accordion-up 0.2s ease-out",
     },
   },
   plugins: [require("tailwindcss-animate")],
 };
-export default config;
