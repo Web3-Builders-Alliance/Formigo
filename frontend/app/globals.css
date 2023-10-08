@@ -36,8 +36,10 @@
   }
 
   .dark {
-    --background: #121212;
+    --background: #18181b;
     --foreground: #fafafa;
+    
+    --destructive: #e33b32;
 
     --text-primary: #fafafa;
     --text-secondary: #979aa0;
