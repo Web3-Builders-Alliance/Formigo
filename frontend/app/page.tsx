@@ -1,6 +1,6 @@
 import DividerText from "@/components/divider-text";
 import MagicInput from "@/components/magic-input";
-import PhatomButton from "@/components/phantom-button";
+import PhantomButton from "@/components/phantom-button";
 import Image from "next/image";
 
 export default function Home() {
@@ -26,7 +26,7 @@ export default function Home() {
         </div>
         <DividerText label="or" />
         <div className="w-full">
-          <PhatomButton className="w-full" />
+          <PhantomButton className="w-full" />
         </div>
       </div>
     </main>

@@ -1,4 +1,4 @@
-export default function PhatomIcon({ className }: { className?: string }) {
+export default function PhantomIcon({ className }: { className?: string }) {
   return (
     <svg
       className={className}
