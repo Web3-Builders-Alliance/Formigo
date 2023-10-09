@@ -1,4 +1,4 @@
-import PhatomIcon from "./icons/phantom";
+import PhantomIcon from "./icons/phantom";
 import { Button } from "./ui/button";
 
 export default function PhatomButton({
@@ -10,7 +10,7 @@ export default function PhatomButton({
 }) {
   return (
     <Button variant="outline" className={className} onClick={onClick}>
-      <PhatomIcon className="w-5 h-4 mr-2" />
+      <PhantomIcon className="w-5 h-4 mr-2" />
       Phantom wallet
     </Button>
   );
