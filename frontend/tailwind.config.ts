@@ -46,6 +46,8 @@ module.exports = {
         "formigo-teal": "#40E0D0",
         "formigo-orange": "#FF5500",
         "formigo-lightOrange": "#FFE1D2",
+        "formigo-light/primary-2nd": "#9062FF",
+        "formigo-danger": "#E33B32",
       },
     },
     borderRadius: {
