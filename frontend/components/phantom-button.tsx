@@ -1,7 +1,7 @@
 import PhantomIcon from "./icons/phantom";
 import { Button } from "./ui/button";
 
-export default function PhatomButton({
+export default function PhantomButton({
   className,
   onClick,
 }: {
