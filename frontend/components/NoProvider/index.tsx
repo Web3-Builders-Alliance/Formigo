@@ -1,28 +1,10 @@
 import React from 'react';
-import styled from 'styled-components';
 
-import { REACT_GRAY } from '../utils/constants';
-
-// =============================================================================
-// Styled Components
-// =============================================================================
-
-const StyledMain = styled.main`
-  padding: 20px;
-  height: 100vh;
-  background-color: ${REACT_GRAY};
-`;
-
-// =============================================================================
-// Main Component
-// =============================================================================
-
-// TODO: @PHANTOM-TEAM: Let's improve this UI
 const NoProvider = () => {
   return (
-    <StyledMain>
+    <div className='rounded-md border-2 p-[20px] w-full text-center'>
       <h2>Could not find a provider</h2>
-    </StyledMain>
+    </div>
   );
 };
 
