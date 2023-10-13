@@ -1,53 +1,123 @@
 'use client';
 
-import React, { FC, useCallback, useMemo } from 'react';
-import {
-  ConnectionProvider,
-  WalletProvider,
-} from '@solana/wallet-adapter-react';
-import { Adapter, WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import { UnsafeBurnerWalletAdapter } from '@solana/wallet-adapter-wallets';
-import {
-  WalletModalProvider,
-  WalletDisconnectButton,
-  WalletMultiButton,
-  BaseWalletMultiButton,
-} from '@solana/wallet-adapter-react-ui';
-import { clusterApiUrl } from '@solana/web3.js';
-import { SolanaSignInInput } from '@solana/wallet-standard-features';
+import React, { useEffect, useCallback, useMemo } from 'react';
+import { PublicKey } from '@solana/web3.js';
+import { getProvider, signMessage, signTransaction } from './utils';
+import NoProvider from './NoProvider';
+import PhantomIcon from './icons/phantom';
+import { Button } from './ui/button';
 
-// Default styles that can be overridden by your app
-require('@solana/wallet-adapter-react-ui/styles.css');
 
-const LABELS = {
-  'change-wallet': 'Change wallet',
-  connecting: 'Connecting ...',
-  'copy-address': 'Copy address',
-  copied: 'Copied',
-  disconnect: 'Disconnect',
-  'has-wallet': 'Connect',
-  'no-wallet': 'Select Wallet',
-} as const;
+const provider = getProvider();
+const message = 'Sign into Formigo!';
 
-export const PhantomButton: FC = () => {
-  const network = WalletAdapterNetwork.Devnet;
+export type ConnectedMethods = {
+  name: string;
+  onClick: () => Promise<string | void | SignedMessage>;
+};
 
-  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+type SignedMessage = {
+  signature: Uint8Array;
+  publicKey: string;
+};
 
-  const wallets = useMemo(
-    () => [],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [network]
-  );
+interface Props {
+  publicKey: PublicKey | null;
+  connectedMethods: ConnectedMethods[];
+  handleConnect: () => Promise<void>;
+}
+
+const useProps = (): Props => {
+  useEffect(() => {
+    if (!provider) return;
+
+    // attempt to eagerly connect
+    provider.connect({ onlyIfTrusted: true }).catch(() => {});
+
+    provider.on('connect', (publicKey: PublicKey) => {});
+
+    provider.on('disconnect', () => {});
+
+    provider.on('accountChanged', (publicKey: PublicKey | null) => {});
+  }, []);
+
+  /** SignMessage */
+  const handleSignMessage = useCallback(async () => {
+    if (!provider) return;
+
+    try {
+      const signedMessage = await signMessage(provider, message);
+      return signedMessage;
+    } catch (error: any) {}
+  }, []);
+
+  /** Connect */
+  const handleConnect = useCallback(async () => {
+    if (!provider) return;
+
+    try {
+      await provider.connect();
+    } catch (error: any) {}
+  }, []);
+
+  /** Disconnect */
+  const handleDisconnect = useCallback(async () => {
+    if (!provider) return;
+
+    try {
+      await provider.disconnect();
+    } catch (error: any) {}
+  }, []);
+
+  const connectedMethods = useMemo(() => {
+    return [
+      {
+        name: 'Sign Message',
+        onClick: handleSignMessage,
+      },
+      {
+        name: 'Disconnect',
+        onClick: handleDisconnect,
+      },
+    ];
+  }, [handleSignMessage, handleDisconnect]);
+
+  return {
+    publicKey: provider?.publicKey || null,
+    connectedMethods,
+    handleConnect,
+  };
+};
+
+const PhantomButton = () => {
+  const { publicKey, connectedMethods, handleConnect } = useProps();
+
+  if (!provider) {
+    return <NoProvider />;
+  }
+
+  const handleClick = async () => {
+    const message =
+      await connectedMethods[connectedMethods.length - 2].onClick();
+
+    fetch('https://formigo-api.up.railway.app/api/auth', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        walletAddress: publicKey,
+        message: 'test',
+        signature: message.signature,
+      }),
+    });
+  };
 
   return (
-    <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets} autoConnect>
-        <WalletModalProvider>
-            <WalletMultiButton />
-        </WalletModalProvider>
-      </WalletProvider>
-    </ConnectionProvider>
+    <Button variant='outline' className='w-full' onClick={handleClick}>
+      <PhantomIcon className='mr-2 h-4 w-5' />
+      Phantom wallet
+    </Button>
   );
 };
 
