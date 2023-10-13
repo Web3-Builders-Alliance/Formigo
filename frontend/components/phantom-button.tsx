@@ -6,7 +6,7 @@ import { getProvider, signMessage, signTransaction } from './utils';
 import NoProvider from './NoProvider';
 import PhantomIcon from './icons/phantom';
 import { Button } from './ui/button';
-
+import { useRouter } from 'next/router';
 
 const provider = getProvider();
 const message = 'Sign into Formigo!';
@@ -91,6 +91,7 @@ const useProps = (): Props => {
 
 const PhantomButton = () => {
   const { publicKey, connectedMethods, handleConnect } = useProps();
+  const router = useRouter();
 
   if (!provider) {
     return <NoProvider />;
@@ -100,17 +101,21 @@ const PhantomButton = () => {
     const message =
       await connectedMethods[connectedMethods.length - 2].onClick();
 
-    fetch('https://formigo-api.up.railway.app/api/auth', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        walletAddress: publicKey,
-        message: 'test',
-        signature: message.signature,
-      }),
-    });
+    if (message) {
+      fetch('https://formigo-api.up.railway.app/api/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          walletAddress: publicKey,
+          message: 'test',
+          signature: message.signature,
+        }),
+      }).then(() => {
+        router.push('/dashboard')
+      });
+    }
   };
 
   return (
