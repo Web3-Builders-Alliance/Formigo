@@ -6,7 +6,8 @@ import { getProvider, signMessage, signTransaction } from './utils';
 import NoProvider from './NoProvider';
 import PhantomIcon from './icons/phantom';
 import { Button } from './ui/button';
-import { useRouter } from 'next/router';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+
 
 const provider = getProvider();
 const message = 'Sign into Formigo!';
@@ -25,6 +26,10 @@ interface Props {
   publicKey: PublicKey | null;
   connectedMethods: ConnectedMethods[];
   handleConnect: () => Promise<void>;
+}
+
+type PhantomButtonProps = {
+  router: AppRouterInstance
 }
 
 const useProps = (): Props => {
@@ -89,9 +94,9 @@ const useProps = (): Props => {
   };
 };
 
-const PhantomButton = () => {
+const PhantomButton = (props:PhantomButtonProps) => {
   const { publicKey, connectedMethods, handleConnect } = useProps();
-  const router = useRouter();
+  
 
   if (!provider) {
     return <NoProvider />;
@@ -113,7 +118,7 @@ const PhantomButton = () => {
           signature: message.signature,
         }),
       }).then(() => {
-        router.push('/dashboard')
+        props.router.push('/dashboard')
       });
     }
   };
