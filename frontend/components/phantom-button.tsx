@@ -2,7 +2,7 @@
 
 import React, { useEffect, useCallback, useMemo } from 'react';
 import { PublicKey } from '@solana/web3.js';
-import { getProvider, signMessage, signTransaction } from './utils';
+import { getProvider, signMessage } from './utils';
 import NoProvider from './NoProvider';
 import PhantomIcon from './icons/phantom';
 import { Button } from './ui/button';
