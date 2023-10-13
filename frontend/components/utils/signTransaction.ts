@@ -1,6 +1,6 @@
 import { Transaction, VersionedTransaction } from '@solana/web3.js';
 
-import { PhantomProvider } from '../types';
+import { PhantomProvider } from './types';
 
 /**
  * Signs a transaction

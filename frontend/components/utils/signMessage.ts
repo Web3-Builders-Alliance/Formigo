@@ -1,4 +1,4 @@
-import { PhantomProvider } from '../types';
+import { PhantomProvider } from './types';
 
 /**
  * Signs a message
@@ -6,7 +6,10 @@ import { PhantomProvider } from '../types';
  * @param   {String}          message  a message to sign
  * @returns {Any}                      TODO(get type)
  */
-const signMessage = async (provider: PhantomProvider, message: string): Promise<string> => {
+const signMessage = async (
+  provider: PhantomProvider,
+  message: string
+): Promise<string> => {
   try {
     const encodedMessage = new TextEncoder().encode(message);
     const signedMessage = await provider.signMessage(encodedMessage);
