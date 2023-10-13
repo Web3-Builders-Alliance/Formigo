@@ -1,3 +1,5 @@
+import PublishedForm from '@/components/published-form';
+
 export default function SurveyRespondentPage() {
-  return <></>; // TODO: Filling up survey page
+  return <PublishedForm />; // TODO: Filling up survey page
 }
