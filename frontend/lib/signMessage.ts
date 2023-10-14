@@ -14,7 +14,7 @@ const signMessage = async (
     const encodedMessage = new TextEncoder().encode(message);
     const signedMessage = await provider.signMessage(encodedMessage);
     return signedMessage;
-  } catch (error) {
+  } catch (error: any) {
     console.warn(error);
     throw new Error(error.message);
   }

@@ -11,7 +11,7 @@ const defaultRoutes = [
     route: userRoutes,
   },
   {
-    path: "/form",
+    path: "/forms",
     route: formRoutes,
   },
   {

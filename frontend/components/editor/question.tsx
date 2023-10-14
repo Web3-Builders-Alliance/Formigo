@@ -24,12 +24,22 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import Choices from './choices';
 import { Button } from '../ui/button';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { Label } from '../ui/label';
+import useFormStore from '@/stores/useFormStore';
+import { IoAddCircle, IoTrash } from 'react-icons/io5';
+import { useToast } from '../ui/use-toast';
+
+interface ChoiceItem {
+  id: number;
+  value: string;
+}
 
 export default function Question({ index }: { index: number }) {
+  const setFormData = useFormStore((state) => state.setFormData);
+  const { toast } = useToast();
+  const formData = useFormStore((state) => state.formData);
   const FormSchema = z.object({
     question: z.string().min(1, { message: 'This field has to be filled.' }),
     questionType: z
@@ -40,38 +50,102 @@ export default function Question({ index }: { index: number }) {
   });
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
+    defaultValues: {
+      question: '',
+      questionType: '',
+      choices: [],
+      required: 'true',
+    },
   });
-  const [choiceComponents, setChoiceComponents] = useState<React.ReactNode[]>(
-    []
-  );
+  const [choices, setChoices] = useState<ChoiceItem[]>([
+    { id: 1, value: '' },
+    { id: 2, value: '' },
+  ]);
+
+  const recordQuestion = async () => {
+    let data = form.getValues();
+    if (
+      data.question == '' ||
+      data.questionType == '' ||
+      data.required == '' ||
+      (data.questionType === 'choice' && !choices)
+    ) {
+      const missingFields = [];
+      if (data.question == '') missingFields.push('Question');
+      if (data.questionType == '') missingFields.push('Question type');
+      if (data.required == '') missingFields.push('Required');
+      if (data.questionType === 'choice' && !choices)
+        missingFields.push('choices');
+
+      let message = `${missingFields.join(', ')} field${
+        missingFields.length > 1 ? 's' : ''
+      } ${missingFields.length > 1 ? ' are' : ' is'} required`;
+
+      toast({
+        title: 'Fields that are mandatory must be filled in.',
+        description: message,
+        variant: 'destructive',
+      });
+    } else {
+      setFormData(index, {
+        id: index,
+        question: data.question,
+        required: data.required
+          ? data.required === 'true'
+            ? true
+            : false
+          : false,
+        questionType: data.questionType,
+        choices:
+          data.questionType === 'choice'
+            ? choices.map((item) => item.value)
+            : '',
+      });
+    }
+  };
+
+  const updateChoicesById = (id: number, updatedData: Partial<ChoiceItem>) => {
+    if (formFound.length == 0) {
+      const updatedArray = choices.map((item) => {
+        if (item.id === id) {
+          return { ...item, ...updatedData };
+        }
+        return item;
+      });
+      setChoices(updatedArray);
+    }
+  };
 
   const addChoice = () => {
-    setChoiceComponents((prevComponents) => [
-      ...prevComponents,
-      <Choices
-        key={prevComponents.length}
-        index={prevComponents.length}
-        removeChoice={removeChoice}
-      />,
-    ]);
+    if (formFound.length == 0) {
+      setChoices((prev) => [...prev, { id: prev.length + 1, value: '' }]);
+    }
   };
 
-  // Function to remove a choice component by index
-  const removeChoice = (indexToRemove: number) => {
-    setChoiceComponents((prevComponents) =>
-      prevComponents.filter((_, index) => index !== indexToRemove)
-    );
+  const removeChoiceById = (id: number) => {
+    if (formFound.length == 0) {
+      const updatedArray = choices.filter((item) => item.id !== id);
+      setChoices(updatedArray);
+    }
   };
+
+  let formFound = formData.filter((item) => item.id === index);
 
   return (
     <div className='w-[770px] rounded-md border border-border bg-card p-4 font-sans ring ring-transparent duration-300 ease-in-out focus-within:ring-btn-primary '>
-      <div className='mb-6 flex items-center gap-2'>
+      <div
+        className={`${
+          formFound.length != 0 ? 'py-4' : 'mb-6'
+        } flex items-center gap-2`}
+      >
         <div className='flex h-[34px] w-[36px] items-center justify-center rounded-full bg-btn-primary font-sans text-sm font-semibold'>
-          {index}
+          {index + 1}
         </div>
 
         <p className='w-full overflow-hidden text-ellipsis font-sans text-xl font-medium text-txt'>
-          {form.watch('question')}
+          {formFound.length != 0
+            ? formFound[0].question
+            : form.watch('question')}
         </p>
       </div>
       <Form {...form}>
@@ -86,7 +160,7 @@ export default function Question({ index }: { index: number }) {
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
-                    {...form.register('questionType')}
+                    {...form.register('questionType', { required: true })}
                   >
                     <SelectTrigger className='w-1/2'>
                       <SelectValue placeholder='Select question type' />
@@ -106,7 +180,7 @@ export default function Question({ index }: { index: number }) {
             )}
           />
 
-          {form.watch('questionType') != null ? (
+          {form.watch('questionType') != '' ? (
             <>
               <FormField
                 control={form.control}
@@ -115,7 +189,11 @@ export default function Question({ index }: { index: number }) {
                   <FormItem>
                     <FormLabel>Question</FormLabel>
                     <FormControl>
-                      <Input placeholder='Input question' {...field} />
+                      <Input
+                        placeholder='Input question'
+                        {...field}
+                        {...form.register('question', { required: true })}
+                      />
                     </FormControl>
 
                     <FormMessage />
@@ -131,12 +209,12 @@ export default function Question({ index }: { index: number }) {
                     <FormControl>
                       <RadioGroup
                         onValueChange={field.onChange}
-                        defaultValue={"true"}
+                        {...field}
                         className='flex items-center space-x-2'
                       >
                         <RadioGroupItem value={'true'} id='r1' />
                         <Label htmlFor='r1'>Yes</Label>
-                        <RadioGroupItem value={'false'} id='r1' />
+                        <RadioGroupItem value={'false'} id='r2' />
                         <Label htmlFor='r2'>No</Label>
                       </RadioGroup>
                     </FormControl>
@@ -157,20 +235,45 @@ export default function Question({ index }: { index: number }) {
                   <FormLabel>Choices</FormLabel>
                   <FormControl>
                     <>
-                      <div
-                        className={`flex w-1/3 flex-col gap-2 ${
-                          choiceComponents.length == 0 ? '' : 'pb-2'
-                        }`}
-                      >
-                        {choiceComponents}
-                      </div>
-                      <Button
-                        type='button'
-                        className='text-sm'
-                        onClick={addChoice}
-                      >
-                        Add choice
-                      </Button>
+                      {choices.map((item) => {
+                        return (
+                          <div
+                            className={`flex w-full items-center gap-4`}
+                            key={item.id}
+                          >
+                            <Input
+                              value={item.value}
+                              onChange={(e) => {
+                                updateChoicesById(item.id, {
+                                  value: e.target.value,
+                                });
+                              }}
+                              placeholder='Input choice'
+                              className='w-1/2'
+                            />
+                            {item.id != 1 && formFound.length == 0 ? (
+                              <div
+                                className='cursor-pointer'
+                                onClick={() => removeChoiceById(item.id)}
+                              >
+                                <IoTrash className='h-7 w-7 fill-destructive' />
+                              </div>
+                            ) : (
+                              <></>
+                            )}
+                            {formFound.length != 0 ? (
+                              <></>
+                            ) : (
+                              <div
+                                className='cursor-pointer'
+                                onClick={addChoice}
+                              >
+                                <IoAddCircle className='h-7 w-7 fill-btn-primary' />
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
                     </>
                   </FormControl>
 
@@ -179,6 +282,13 @@ export default function Question({ index }: { index: number }) {
               )}
             />
           ) : null}
+          {formFound.length != 0 ? (
+            <></>
+          ) : (
+            <Button onClick={recordQuestion} type='button'>
+              Save question
+            </Button>
+          )}
         </form>
       </Form>
     </div>
