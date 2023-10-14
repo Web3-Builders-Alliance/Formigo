@@ -12,7 +12,10 @@ export default function CreateForm() {
       <p className="text-center text-base font-normal text-txt-secondary w-3/4">
         Behold! tap the button below and conjure responses swiftly!
       </p>
-      <Button onClick={() => router.push("/editor")}>Create form</Button>
+      <Button onClick={() => {
+        localStorage.removeItem("formpreview")
+        router.push("/editor")
+        }}>Create form</Button>
     </div>
   );
 }

@@ -1,7 +1,7 @@
-"use client";
-import { IoEllipsisHorizontal } from "react-icons/io5";
-import { Badge } from "./ui/badge";
-import { Button } from "./ui/button";
+'use client';
+import { IoEllipsisHorizontal } from 'react-icons/io5';
+import { Badge } from './ui/badge';
+import { Button } from './ui/button';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -11,42 +11,45 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { useRouter } from "next/navigation";
+} from './ui/dropdown-menu';
+import { useRouter } from 'next/navigation';
 
-export default function FormCard() {
+type Props = {
+  name: string;
+  formId: string;
+  status: 'active' | 'draft' | 'archive';
+};
+
+export default function FormCard({ name, status, formId }: Props) {
   const router = useRouter();
   return (
-    <div className="'flex bg-card h-[135px] w-full flex-col gap-4 rounded-md px-9 py-6">
-      <div className="flex w-full items-center justify-between">
-        <h1 className="font-sans text-xl">Formigo Feedback</h1>
+    <div className="'flex h-[135px] w-full flex-col gap-4 rounded-md bg-card px-9 py-6">
+      <div className='flex w-full items-center justify-between'>
+        <h1 className='font-sans text-xl'>{name}</h1>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button type="button" variant="secondary">
-              <IoEllipsisHorizontal className="h-6 w-6" />
+            <Button type='button' variant='secondary'>
+              <IoEllipsisHorizontal className='h-6 w-6' />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56 ">
+          <DropdownMenuContent className='w-56 '>
             <DropdownMenuItem
-              className="font-sans text-base"
-              onClick={() => router.push("/form/ecqwsx")}
+              className='font-sans text-base'
+              onClick={() => router.push(`/form/${formId}`)}
             >
               Overview
             </DropdownMenuItem>
             <DropdownMenuItem
-              className="font-sans text-base"
-              onClick={() => router.push("/form/ecqwsx/responses")}
+              className='font-sans text-base'
+              onClick={() => router.push(`/form/${formId}/responses`)}
             >
               Responses
             </DropdownMenuItem>
             <DropdownMenuItem
-              className="font-sans text-base"
-              onClick={() => router.push("/form/ecqwsx/settings")}
+              className='font-sans text-base'
+              onClick={() => router.push(`/form/${formId}/settings`)}
             >
               Settings
-            </DropdownMenuItem>
-            <DropdownMenuItem className="font-sans text-base">
-              Share link
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -22,11 +22,11 @@ interface AnswerItem {
   answer: string | null;
   id: number;
 }
-export default function PublishedForm() {
+export default function PreviewForm() {
   const formData = useFormStore((state) => state.formData);
   const formOverview = useFormStore((state) => state.formOverview);
   console.log(formOverview);
-
+  
   const { toast } = useToast();
 
   useStore(useFormStore, (state) => state);
@@ -168,7 +168,7 @@ export default function PublishedForm() {
                   ) : (
                     <>
                       <RadioGroup
-                        className='text-green'
+                      className='text-green'
                         onValueChange={(e) => {
                           updateAnswerById(formData[questionStep].id, {
                             answer: e,
