@@ -15,6 +15,7 @@ type CreateForm = {
   encryptedForm: string;
   iv: string;
   ecPubkey: string;
+  formName: string;
 };
 
 const keypair = Keypair.fromSecretKey(new Uint8Array(WALLET));
@@ -43,11 +44,12 @@ export const createForm = async (req: IUserRequest, res: Response) => {
   try {
     const user = req.user;
 
-    const { encryptedForm, iv, ecPubkey }: CreateForm = req.body;
+    const { encryptedForm, iv, ecPubkey, formName }: CreateForm = req.body;
 
     // Check if user post the required fields
-    if (!encryptedForm || !iv || !ecPubkey) {
+    if (!encryptedForm || !iv || !ecPubkey || !formName) {
       const missingFields = [];
+      if (!formName) missingFields.push("formName");
       if (!encryptedForm) missingFields.push("encryptedForm");
       if (!iv) missingFields.push("iv");
       if (!ecPubkey) missingFields.push("ecPubkey");
@@ -123,11 +125,17 @@ export const createForm = async (req: IUserRequest, res: Response) => {
       }
     }
 
+    await User.findOneAndUpdate(
+      { base58Address: user.pubkey },
+      { $set: { ecPub: ecPubkey } }
+    );
+
     const form = await Form.create({
       formId: uuid,
       creator: user.pubkey,
       totalChunk: chunks.length,
-      iv
+      iv,
+      name: formName,
     });
     return res.status(201).json({
       data: form,
@@ -254,7 +262,7 @@ export const updateFormViews = async (req: Request, res: Response) => {
       let newForm = await Form.findOneAndUpdate(
         { formId },
         { $set: { views: form.views + 1 } },
-        {new: true}
+        { new: true }
       );
       return res.status(200).json({
         status: true,
