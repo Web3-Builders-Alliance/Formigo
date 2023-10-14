@@ -1,5 +1,11 @@
 import PublishedForm from '@/components/published-form';
 
-export default function SurveyRespondentPage() {
-  return <PublishedForm />; // TODO: Filling up survey page
+export default function SurveyRespondentPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  console.log(params);
+
+  return <></>; // TODO: Filling up survey page
 }

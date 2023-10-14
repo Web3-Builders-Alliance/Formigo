@@ -3,12 +3,18 @@
 import DividerText from '@/components/divider-text';
 import MagicInput from '@/components/magic-input';
 import PhantomButton from '@/components/phantom-button';
+import useGetMe from '@/hooks/useGetMe';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const router = useRouter();
+  const { isLoading, data } = useGetMe();
 
+  if (isLoading) return <p>Loading...</p>;
+  if (data) {
+    router.push('/dashboard');
+  }
   return (
     <main className='flex h-screen flex-col items-center justify-center font-sans'>
       <div className='flex h-fit w-2/5 flex-col rounded-md bg-card px-[70px] py-[48px]'>
@@ -30,8 +36,8 @@ export default function Home() {
           <MagicInput />
         </div>
         <DividerText label='or' />
-        <div className='w-full flex justify-center'>
-          <PhantomButton router={router}/>
+        <div className='flex w-full justify-center'>
+          <PhantomButton />
         </div>
       </div>
     </main>
