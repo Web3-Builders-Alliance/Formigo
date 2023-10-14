@@ -167,6 +167,7 @@ export const responseForm = async (req: Request, res: Response) => {
       iv,
       anonymous,
       formCreator: formFound.creator,
+      surveyName: formFound.name
     });
 
     return res.status(201).json({

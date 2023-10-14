@@ -61,6 +61,14 @@ if (!ALLOWED_DOMAIN) {
 
 const WALLET = walletUnset.map(Number);
 
+const MAGIC_SECRET = process.env["AUTH_MAGIC_KEY"];
+if (!MAGIC_SECRET) {
+  console.log(
+    "No auth magic key for decryption. Set AUTH_MAGIC_KEY environment variable."
+  );
+  process.exit(1);
+}
+
 export {
   WALLET,
   RPC,
@@ -69,4 +77,5 @@ export {
   MONGODB_URI,
   FORMIGO_PROGRAM,
   ALLOWED_DOMAIN,
+  MAGIC_SECRET,
 };
