@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 export interface IRespondent extends Document {
   respondent: string;
   formId: string;
+  surveyName: string
   totalChunk: number;
   formCreator:string
   responseId: string;
@@ -19,6 +20,7 @@ const responseSchema = new mongoose.Schema(
     totalChunk: { type: Number, required: true },
     anonymous: { type: Boolean, required: true },
     formCreator:{ type: String, required: true },
+    surveyName:{ type: String, required: true },
   },
   { timestamps: true }
 );
