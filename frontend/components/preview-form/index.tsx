@@ -1,9 +1,8 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '../ui/button';
-import Image from 'next/image';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import {
@@ -12,29 +11,41 @@ import {
   IoEye,
   IoCheckmarkCircle,
 } from 'react-icons/io5';
-import { Badge } from '../ui/badge';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
-import useFormStore from '@/stores/useFormStore';
-import { useStore } from '@/hooks/useStore';
 import { useToast } from '../ui/use-toast';
+
+type Question = {
+  id: number;
+  question: string;
+  required: boolean;
+  questionType: string;
+  choices: string[];
+};
+type PreviewData = {
+  name: string;
+  description: string;
+  validation: string;
+  theme: string;
+  walletAddress: [];
+  programAddress: string;
+  amount: string;
+  questions: Question[];
+};
 
 interface AnswerItem {
   answer: string | null;
   id: number;
 }
-export default function PreviewForm() {
-  const formData = useFormStore((state) => state.formData);
-  const formOverview = useFormStore((state) => state.formOverview);
-  console.log(formOverview);
-  
+export default function PreviewForm({ data }: { data: PreviewData }) {
   const { toast } = useToast();
 
-  useStore(useFormStore, (state) => state);
-
   const [questionStep, setQuestionStep] = useState<number>(0);
-  const [answers, setAnswers] = useState<AnswerItem[]>([
-    { id: formData[questionStep].id, answer: null },
-  ]);
+  const initialState =
+    data.questions.length != 0
+      ? [{ id: data.questions[questionStep].id, answer: null }]
+      : [];
+
+  const [answers, setAnswers] = useState<AnswerItem[]>(initialState);
   const [done, setDone] = useState(false);
 
   const updateAnswerById = (id: number, updatedData: Partial<AnswerItem>) => {
@@ -49,7 +60,6 @@ export default function PreviewForm() {
 
   function logAnswer() {
     setDone(true);
-    console.log(answers);
   }
 
   function requiredFieldToast() {
@@ -64,19 +74,19 @@ export default function PreviewForm() {
     <>
       <nav
         className={`flex h-[70px] w-full items-center justify-center ${
-          formOverview?.theme == 'dark'
+          data?.theme == 'dark'
             ? ' border-b bg-card'
             : 'border-b border-[#EAEBF0] bg-white'
         }`}
       >
         <IoEye
           className={`mr-2 h-5 w-5 ${
-            formOverview?.theme == 'dark' ? '' : 'fill-gray-900'
+            data?.theme == 'dark' ? '' : 'fill-gray-900'
           }`}
         />
         <p
           className={`font-sans text-lg font-medium ${
-            formOverview?.theme == 'dark' ? '' : 'text-black'
+            data?.theme == 'dark' ? '' : 'text-black'
           }`}
         >
           Preview
@@ -84,12 +94,12 @@ export default function PreviewForm() {
       </nav>
       <main
         className={`flex h-screen w-full items-center justify-center font-sans ${
-          formOverview?.theme == 'dark' ? '' : 'bg-[#FAFBFC]'
+          data?.theme == 'dark' ? '' : 'bg-[#FAFBFC]'
         } overflow-y-hidden`}
       >
         <aside
           className={`flex h-screen w-[620px] flex-col justify-between ${
-            formOverview?.theme == 'dark'
+            data?.theme == 'dark'
               ? 'border-r border-border bg-card'
               : 'border-r border-[#EAEBF0] bg-white'
           }  pt-48`}
@@ -97,14 +107,12 @@ export default function PreviewForm() {
           <div className='mt-16 flex flex-col gap-2 px-6'>
             <h1
               className={`text-3xl font-semibold  ${
-                formOverview?.theme == 'dark' ? '' : 'text-gray-800'
+                data?.theme == 'dark' ? '' : 'text-gray-800'
               }`}
             >
-              {formOverview?.name}
+              {data?.name}
             </h1>
-            <p className='text-base text-txt-secondary'>
-              {formOverview?.description}
-            </p>
+            <p className='text-base text-txt-secondary'>{data?.description}</p>
           </div>
         </aside>
         {!done ? (
@@ -121,13 +129,13 @@ export default function PreviewForm() {
                 {questionStep > 0 ? (
                   <div
                     className={`flex w-fit cursor-pointer items-center hover:underline ${
-                      formOverview?.theme == 'dark' ? '' : 'text-gray-900'
+                      data?.theme == 'dark' ? '' : 'text-gray-900'
                     }`}
                     onClick={() => setQuestionStep(questionStep - 1)}
                   >
                     <IoArrowBack
                       className={`mr-2 ${
-                        formOverview?.theme == 'dark' ? '' : 'fill-gray-900'
+                        data?.theme == 'dark' ? '' : 'fill-gray-900'
                       }`}
                     />{' '}
                     Back
@@ -136,30 +144,30 @@ export default function PreviewForm() {
                 <div className='flex flex-col gap-4'>
                   <Label
                     className={`text-2xl ${
-                      formOverview?.theme == 'dark' ? '' : 'text-gray-900'
+                      data?.theme == 'dark' ? '' : 'text-gray-900'
                     }`}
                   >
-                    {formData[questionStep]?.question}
+                    {data.questions[questionStep]?.question}
                   </Label>
 
-                  {formData[questionStep]?.questionType === 'text' ? (
+                  {data.questions[questionStep]?.questionType === 'text' ? (
                     <>
                       <Input
                         onChange={(e) => {
                           console.log(e.target.value);
 
-                          updateAnswerById(formData[questionStep].id, {
+                          updateAnswerById(data.questions[questionStep].id, {
                             answer: e.target.value,
                           });
                         }}
                         className={`${
-                          formOverview?.theme == 'dark'
+                          data?.theme == 'dark'
                             ? ''
                             : 'border border-[#EAEBF0] bg-[#FAFBFC] text-black'
                         }`}
                       />
-                      {formData[questionStep].required === true ||
-                      formData[questionStep].required === 'true' ? (
+                      {data.questions[questionStep].required === true ||
+                      data.questions[questionStep].required === true ? (
                         <p className='text-sm text-green-500'>
                           This field is required
                         </p>
@@ -168,15 +176,15 @@ export default function PreviewForm() {
                   ) : (
                     <>
                       <RadioGroup
-                      className='text-green'
+                        className='text-green'
                         onValueChange={(e) => {
-                          updateAnswerById(formData[questionStep].id, {
+                          updateAnswerById(data.questions[questionStep].id, {
                             answer: e,
                           });
                         }}
                       >
-                        {formData[questionStep]?.choices.length != 0 ? (
-                          formData[questionStep]?.choices.map(
+                        {data.questions[questionStep]?.choices.length != 0 ? (
+                          data.questions[questionStep]?.choices.map(
                             (choice: string, index: number) => (
                               <div className='flex items-center space-x-2'>
                                 <RadioGroupItem
@@ -186,9 +194,7 @@ export default function PreviewForm() {
                                 />
                                 <Label
                                   className={`${
-                                    formOverview?.theme == 'dark'
-                                      ? ''
-                                      : 'text-black'
+                                    data?.theme == 'dark' ? '' : 'text-black'
                                   }`}
                                   htmlFor={`r${index}`}
                                 >
@@ -201,7 +207,7 @@ export default function PreviewForm() {
                           <></>
                         )}
                       </RadioGroup>
-                      {formData[questionStep]?.required ? (
+                      {data.questions[questionStep]?.required ? (
                         <p className='text-sm text-green-500'>
                           This field is required
                         </p>
@@ -211,24 +217,22 @@ export default function PreviewForm() {
                   <div className='mt-6 flex justify-between'>
                     <p className='text-base text-txt-secondary'>{`Question ${
                       questionStep + 1
-                    } / ${formData.length}`}</p>
+                    } / ${data.questions.length}`}</p>
                     <div>
                       <Button
                         variant={`${
-                          formOverview?.theme == 'dark'
-                            ? 'outline'
-                            : 'outline-primary'
+                          data?.theme == 'dark' ? 'outline' : 'outline-primary'
                         }`}
                         onClick={
-                          questionStep + 1 === formData.length
-                            ? formData[questionStep].required
-                              ? answers[formData[questionStep].id].answer !=
-                                null
+                          questionStep + 1 === data.questions.length
+                            ? data.questions[questionStep].required
+                              ? answers[data.questions[questionStep].id]
+                                  .answer != null
                                 ? logAnswer
                                 : requiredFieldToast
                               : logAnswer
                             : () => {
-                                if (formData[questionStep].required) {
+                                if (data.questions[questionStep].required) {
                                   if (answers[questionStep].answer != null) {
                                     setQuestionStep(questionStep + 1);
                                     if (
@@ -239,7 +243,8 @@ export default function PreviewForm() {
                                       setAnswers((prev) => [
                                         ...prev,
                                         {
-                                          id: formData[questionStep + 1].id,
+                                          id: data.questions[questionStep + 1]
+                                            .id,
                                           answer: null,
                                         },
                                       ]);
@@ -247,11 +252,26 @@ export default function PreviewForm() {
                                   } else {
                                     requiredFieldToast();
                                   }
+                                } else {
+                                  setQuestionStep(questionStep + 1);
+                                  if (
+                                    answers.some(
+                                      (obj) => obj.id != questionStep + 1
+                                    )
+                                  ) {
+                                    setAnswers((prev) => [
+                                      ...prev,
+                                      {
+                                        id: data.questions[questionStep + 1].id,
+                                        answer: null,
+                                      },
+                                    ]);
+                                  }
                                 }
                               }
                         }
                       >
-                        {questionStep + 1 === formData.length ? (
+                        {questionStep + 1 === data.questions.length ? (
                           'Submit'
                         ) : (
                           <IoArrowForward />
@@ -276,13 +296,13 @@ export default function PreviewForm() {
               <IoCheckmarkCircle className='h-14 w-14 fill-blue-500' />
               <Label
                 className={`text-2xl font-medium ${
-                  formOverview?.theme == 'dark' ? '' : 'text-gray-900'
+                  data?.theme == 'dark' ? '' : 'text-gray-900'
                 }`}
               >
                 Form complete!
               </Label>
               <p className='font-sans text-base font-medium text-txt-secondary'>
-                Thank you for taking part of {formOverview?.name} survey
+                Thank you for taking part of {data?.name} survey
               </p>
               <p className='font-sans text-base font-medium text-txt-secondary'>
                 You may now close this page
