@@ -1,9 +1,7 @@
 import express from "express";
-import { auth, authMagic, getMe } from "../controllers/user.controller";
-import authenticateToken from "../middleware/auth";
+import { getEc } from "../controllers/user.controller";
 const router = express.Router();
 
-router.post("/", auth);
-router.get("/me", authenticateToken, getMe);
+router.get("/ec/:wallet", getEc);
 
 export default router;
