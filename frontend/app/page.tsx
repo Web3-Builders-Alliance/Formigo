@@ -16,7 +16,7 @@ export default function Home() {
     router.push('/dashboard');
   }
   return (
-    <main className='flex h-screen flex-col items-center justify-center font-sans'>
+    <main className='flex h-screen flex-col items-center justify-center font-sans bg-[url("/bg.png")] bg-cover'>
       <div className='flex h-fit w-2/5 flex-col rounded-md bg-card px-[70px] py-[48px]'>
         <div className='flex'>
           <Image
@@ -35,10 +35,10 @@ export default function Home() {
         <div className='mt-6 w-full'>
           <MagicInput />
         </div>
-        <DividerText label='or' />
+        {/* <DividerText label='or' />
         <div className='flex w-full justify-center'>
           <PhantomButton />
-        </div>
+        </div> */}
       </div>
     </main>
   );

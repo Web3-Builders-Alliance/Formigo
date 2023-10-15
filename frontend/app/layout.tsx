@@ -4,7 +4,6 @@ import type { Metadata } from 'next';
 import { Inter, Montserrat } from 'next/font/google';
 import { Toaster } from '@/components/ui/toaster';
 
-
 export const metadata: Metadata = {
   title: 'Formigo',
   description: '',
@@ -27,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={`${inter.variable} ${montserrat.variable}`}>
-      <Toaster />
+        <Toaster />
         <ThemeProvider
           attribute='class'
           defaultTheme='dark'
