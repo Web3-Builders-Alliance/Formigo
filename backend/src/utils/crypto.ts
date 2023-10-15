@@ -22,6 +22,7 @@ export function decrypt(
     sharedSecret,
     Buffer.from(iv, "hex")
   );
+
   let decryptedMessage = decipher.update(encryptedData, "hex", "utf-8");
 
   decryptedMessage += decipher.final("utf-8");
