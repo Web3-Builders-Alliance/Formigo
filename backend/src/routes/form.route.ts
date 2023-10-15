@@ -5,6 +5,7 @@ import {
   getAllForms,
   getFormById,
   getFormByIdAnon,
+  updateForm,
   updateFormViews,
 } from "../controllers/form.controller";
 import rateLimit from "express-rate-limit";
@@ -30,6 +31,7 @@ const router = express.Router();
 router.get("/", authenticateToken, getAllForms);
 router.post("/", authenticateToken, createForm);
 router.get("/:formId", authenticateToken, getFormById);
+router.patch("/:formId", authenticateToken, updateForm);
 router.get("/anon/:formId", getFormByIdAnon);
 router.patch("/views/:formId",createAccountLimiter, updateFormViews);
 
