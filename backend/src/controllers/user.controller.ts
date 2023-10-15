@@ -6,16 +6,16 @@ import { JWT_SECRET, MAGIC_SECRET } from "../utils/secrets";
 import { IUserRequest } from "../middleware/auth";
 import { decrypt } from "../utils/crypto";
 
-
 type RegisterData = {
   message: string;
   walletAddress: string;
   signature: string | Uint8Array;
-  wallet: 'magic' | 'adapter'
+  wallet: "magic" | "adapter";
 };
 export const auth = async (req: Request, res: Response) => {
   try {
-    const { message, walletAddress, signature, wallet }: RegisterData = req.body;
+    const { message, walletAddress, signature, wallet }: RegisterData =
+      req.body;
 
     // Check if user post the required fields
     if (!message || !walletAddress || !signature) {
@@ -34,7 +34,7 @@ export const auth = async (req: Request, res: Response) => {
     // Check if user is already registered
     const oldUser = await User.findOne({
       walletAddress: walletAddress.toLowerCase(),
-    });    
+    });
 
     // Verify the signature provided in the body
     const verify = verifySig(message, walletAddress, signature, wallet);
@@ -86,7 +86,7 @@ export const auth = async (req: Request, res: Response) => {
     }
   } catch (error: any) {
     console.log(error);
-    
+
     return res.status(500).json({
       data: null,
       message: error.message,
@@ -189,6 +189,27 @@ export const getMe = async (req: IUserRequest, res: Response) => {
       return res.status(200).json({
         data: userFound,
         message: "User retrived successfuly",
+        status: false,
+      });
+    }
+  } catch (error: any) {
+    return res.status(500).json({
+      data: null,
+      message: error.message,
+      status: false,
+    });
+  }
+};
+
+export const getEc = async (req: Request, res: Response) => {
+  try {
+    const wallet = req.params.wallet;
+    let userFound = await User.findOne({ base58Address: wallet });
+
+    if (userFound) {
+      return res.status(200).json({
+        data: { ec: userFound.ecPub },
+        message: "User ec pubkey retrived successfuly",
         status: false,
       });
     }
