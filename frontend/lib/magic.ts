@@ -3,10 +3,17 @@ import { SolanaExtension } from '@magic-ext/solana';
 
 const RPC = process.env.NEXT_PUBLIC_RPC;
 const MAGIC = process.env.NEXT_PUBLIC_MAGIC_API_DEVNET;
-export const magic = new Magic(MAGIC as string, {
-  extensions: {
-    solana: new SolanaExtension({
-      RPC,
-    }),
-  },
-});
+
+const createMagic = (key: string) => {
+  return (
+    typeof window !== 'undefined' &&
+    new Magic(key, {
+      extensions: {
+        solana: new SolanaExtension({
+          RPC,
+        }),
+      },
+    })
+  );
+};
+export const magic = createMagic(MAGIC as string);
