@@ -10,12 +10,25 @@ import { Form } from "../models/form.model";
 import { FormChunk } from "../models/formChunk.model";
 import { User } from "../models/user.model";
 import { Respondent } from "../models/responses.model";
+import { getSharedKey, serverSignature } from "../utils/serverDecrypt";
+import { decrypt } from "../utils/crypto";
+import { serializeObject } from "../utils/serializedObj";
 
 type CreateForm = {
   encryptedForm: string;
   iv: string;
   ecPubkey: string;
   formName: string;
+};
+
+type Form = {
+  creator: string;
+  formId: string;
+  totalChunk: number;
+  views: number;
+  name: string;
+  status: "active" | "draft" | "archive" | "disable";
+  iv: string;
 };
 
 const keypair = Keypair.fromSecretKey(new Uint8Array(WALLET));
@@ -226,13 +239,26 @@ export const getFormByIdAnon = async (req: Request, res: Response) => {
     });
 
     if (form) {
-      let chunks = await FormChunk.find({ formId }).sort({ part: 1 });
-      return res.status(200).json({
-        status: true,
-        data: { form, chunks },
-        message: form ? "Form successfully retrieved." : "No form was found",
-        code: 200,
-      });
+      let formCreator = await User.findOne({ base58Address: form.creator });
+      if (formCreator) {
+        let chunks = await FormChunk.find({ formId }).sort({ part: 1 });
+        let chunksArray = chunks.map((item) => item.chunk);
+
+        let joinedChunks = chunksArray.join("");
+
+        const serverSig = await serverSignature();
+        const { hashedSharedKey } = await getSharedKey(
+          serverSig,
+          formCreator.ecPub
+        );
+        let decryptedData = decrypt(joinedChunks, form.iv, hashedSharedKey);
+        return res.status(200).json({
+          status: true,
+          data: { form, decryptedData },
+          message: "Form successfully retrieved.",
+          code: 200,
+        });
+      }
     } else {
       return res.status(404).json({
         status: false,
@@ -241,6 +267,46 @@ export const getFormByIdAnon = async (req: Request, res: Response) => {
         code: 404,
       });
     }
+  } catch (error: any) {
+    return res.status(500).json({
+      data: null,
+      message: error.message,
+      status: false,
+    });
+  }
+};
+
+export const updateForm = async (req: IUserRequest, res: Response) => {
+  try {
+    const data: Form = req.body;
+    
+    const serializedData = serializeObject(data);
+
+    const formId = req.params.formId;
+    const form = await Form.findOne({
+      formId,
+    });
+
+    if (!form) {
+      return res.status(400).json({
+        message: "Provided form id not found.",
+        data: null,
+        code: 400,
+        status: false,
+      });
+    }
+
+    let newForm = await Form.findOneAndUpdate(
+      { formId },
+      { $set: serializedData },
+      { new: true }
+    );
+    return res.status(200).json({
+      status: true,
+      data: newForm,
+      message: "form updated",
+      code: 200,
+    });
   } catch (error: any) {
     return res.status(500).json({
       data: null,
