@@ -6,7 +6,7 @@ import useFormStore from '@/stores/useFormStore';
 import Link from 'next/link';
 import { magic } from '@/lib/magic';
 import { generateKeyMessage } from '@/lib/generateMessage';
-import { decodeUTF8 } from 'tweetnacl-util';
+import { decodeUTF8, encodeBase64 } from 'tweetnacl-util';
 import { getSharedKey } from '@/lib/ec';
 import { encrypt } from '@/lib/encrypt';
 import axios from 'axios';
@@ -19,11 +19,12 @@ export default function NavEditor() {
   const formData = useFormStore((state) => state.formData);
   const formOverview = useFormStore((state) => state.formOverview);
   const clearFormState = useFormStore((state) => state.clearFormStore);
-  const isLoading = usePublishingStore((state) => state.isLoading)
-  const setLoading = usePublishingStore((state) => state.setLoading)
+  const isLoading = usePublishingStore((state) => state.isLoading);
+  const setLoading = usePublishingStore((state) => state.setLoading);
   const router = useRouter();
   const { toast } = useToast();
-
+  let data = { ...formOverview, questions: formData };
+  let encodedData = encodeBase64(Buffer.from(JSON.stringify(data)));
 
   async function publishForm() {
     setLoading(true);
@@ -62,7 +63,8 @@ export default function NavEditor() {
             description:
               'Your form has been successfully created and uploaded to the ledger!',
           });
-          router.push(`/form/${data.data.formId}`);
+
+          router.push(`/form/${data.data.data.formId}`);
         })
         .catch(() => {
           setLoading(false);
@@ -84,7 +86,7 @@ export default function NavEditor() {
       <div className='flex gap-2.5'>
         {formData.length != 0 && formOverview ? (
           <>
-            <Link href='/preview' target='_blank'>
+            <Link href={`/preview?data=${encodedData}`} target='_blank'>
               <Button variant='outline'>Preview</Button>
             </Link>
             {isLoading ? (

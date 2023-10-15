@@ -19,18 +19,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { magic } from '@/lib/magic';
 import useMagicStore from '@/stores/useMagicStore';
-import {
-  generateKeyMessage,
-  generateLogInMessage,
-} from '@/lib/generateMessage';
 import axios from 'axios';
 import { decodeUTF8 } from 'tweetnacl-util';
-import nacl from 'tweetnacl';
-import { base58_to_binary } from 'base58-js';
-import { encrypt, encryptWithServerSecret } from '@/lib/encrypt';
 import { useState } from 'react';
 import { ReloadIcon } from '@radix-ui/react-icons';
-import Spinner from './icons/Spinner';
 import useUserStore from '@/stores/useUserStore';
 
 export default function MagicInput() {
@@ -63,32 +55,25 @@ export default function MagicInput() {
 
       setUser(usermagic);
       setWallet(walletAdd);
-      const verifiedMsg = nacl.sign.detached.verify(
-        encodedMsg,
-        signature,
-        base58_to_binary(usermagic.publicAddress)
-      );
 
-      if (verifiedMsg) {
-        let data = await axios.post(
-          '/api/auth/',
-          {
-            walletAddress: usermagic.publicAddress,
-            message,
-            signature,
-            wallet: 'magic',
-          },
-          {
-            headers: { 'Content-Type': 'application/json' },
-          }
-        );
-        if (data.status == 200 || data.status == 201) {
-          setLoginUser(usermagic.publicAddress);
-          router.push('/dashboard');
+      let data = await axios.post(
+        '/api/auth/',
+        {
+          walletAddress: usermagic.publicAddress,
+          message,
+          signature,
+          wallet: 'magic',
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
         }
-      } else {
-        setLoading(false);
+      );
+      if (data.status == 200 || data.status == 201) {
+        setLoginUser(usermagic.publicAddress);
+        router.push('/dashboard');
       }
+
+      setLoading(false);
     } catch (error) {
       setLoading(false);
       console.log(error);

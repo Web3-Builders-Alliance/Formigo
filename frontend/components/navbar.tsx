@@ -36,9 +36,9 @@ const Navbar = () => {
         >
           Forms
         </Button>
-        <Button variant='ghost'>
+        {/* <Button variant='ghost'>
           Account <IoChevronDown className='ml-2.5 h-5 w-5' />
-        </Button>
+        </Button> */}
       </div>
       <Popover>
         <PopoverTrigger>
