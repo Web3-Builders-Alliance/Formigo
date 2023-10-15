@@ -1,14 +1,10 @@
 import { api } from '@/lib/axios';
 import { cookies } from 'next/headers';
 
-export default async function getResponses() {
-  const nextCookies = cookies();
-  const token = nextCookies.get('auth');
-
+export default async function useFormAnon(id: string) {
   try {
-    const { data } = await api.get('/api/responses', {
+    const { data } = await api.get(`/api/forms/anon/${id}`, {
       headers: {
-        Authorization: `Bearer ${token?.value}`,
         'Content-Type': 'application/json',
       },
     });
