@@ -1,11 +1,22 @@
+import NotFoundComp from '@/components/not-found';
 import PublishedForm from '@/components/published-form';
+import getEc from '@/hooks/getEc';
+import useFormAnon from '@/hooks/useFormAnon';
 
-export default function SurveyRespondentPage({
+export default async function SurveyRespondentPage({
   params,
 }: {
-  params: { slug: string };
+  params: { id: string };
 }) {
-  console.log(params);
+  const data = await useFormAnon(params.id);
 
-  return <></>; // TODO: Filling up survey page
+  if (data.hasOwnProperty('response') && data?.response?.status == 404) return <NotFoundComp />;
+
+  if (data.form.status != 'active') return <NotFoundComp />;
+
+  const ecPub = await getEc(data.form.creator);
+  let parsedJson = JSON.parse(data.decryptedData);
+  let formData = parsedJson;
+
+  return <PublishedForm formData={formData} ecPub={ecPub} formId={params.id} />; // TODO: Filling up survey page
 }
