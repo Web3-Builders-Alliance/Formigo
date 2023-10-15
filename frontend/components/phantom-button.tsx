@@ -22,38 +22,38 @@ const PhantomButton = () => {
     return <NoProvider />;
   }
 
-  const handleClick = async () => {
-    try {
-      setLoading(true);
-      const sig = await connectedMethods[connectedMethods.length - 2].onClick();
-      const message = 'Sign into Formigo!';
-      if (sig) {
-        fetch('/api/auth', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            walletAddress: sig.publicKey.toString(),
-            message,
-            signature: sig.signature,
-            wallet: 'adapter',
-          }),
-        })
-          .then(() => {
-            router.push('/dashboard');
-          })
-          .catch((e) => {
-            setLoading(false);
-            console.log(e);
-          });
-      } else {
-        setLoading(false)
-      }
-    } catch (error) {
-      setLoading(false);
-    }
-  };
+  // const handleClick = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const sig = await connectedMethods[connectedMethods.length - 2].onClick();
+  //     const message = 'Sign into Formigo!';
+  //     if (sig) {
+  //       fetch('/api/auth', {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify({
+  //           walletAddress: sig.publicKey.toString(),
+  //           message,
+  //           signature: sig?.signature,
+  //           wallet: 'adapter',
+  //         }),
+  //       })
+  //         .then(() => {
+  //           router.push('/dashboard');
+  //         })
+  //         .catch((e) => {
+  //           setLoading(false);
+  //           console.log(e);
+  //         });
+  //     } else {
+  //       setLoading(false);
+  //     }
+  //   } catch (error) {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <>
@@ -63,7 +63,7 @@ const PhantomButton = () => {
           Please wait
         </Button>
       ) : (
-        <Button variant='outline' className='w-full' onClick={handleClick}>
+        <Button variant='outline' className='w-full'>
           <PhantomIcon className='mr-2 h-4 w-5' />
           Phantom wallet
         </Button>

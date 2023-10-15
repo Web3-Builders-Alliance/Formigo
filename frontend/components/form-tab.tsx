@@ -7,6 +7,7 @@ export default function FormTab() {
   const pathname = usePathname();
   const router = useRouter();
   let parts = pathname.split("/");
+  
   parts = parts.slice(1, parts.length);
   return (
     <div className="flex w-full items-center gap-2.5">
@@ -14,7 +15,7 @@ export default function FormTab() {
         onClick={() => router.push(`/form/${parts[1]}`)}
         variant={parts.length == 2 ? "ghost-active" : "ghost"}
       >
-        Overview
+        Questions
       </Button>
       <Button
         onClick={() => router.push(`/form/${parts[1]}/responses`)}

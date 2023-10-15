@@ -1,20 +1,39 @@
-import ResponseCard from "./response-card";
+import ResponseCard from './response-card';
 
-const data = [
-  { name: "Joseph", date: new Date("2023, 6, 2"), id: "1234-5678-abcd" },
-  { name: "Raymart", date: new Date("2023, 4, 2"),id: "1234-5678-abcd" },
-];
+type Responses = {
+  respondent: string;
+  surveyName: string;
+  responseId: string;
+  anonymous: boolean;
+  createdAt: string | Date;
+};
 
-export default function FormResponseTab() {
+export default function FormResponseTab({
+  responses,
+}: {
+  responses: Responses[];
+}) {
   return (
-    <div className="flex flex-col gap-6 w-[770px] mt-12">
-      {data.map((item, index) => (
-        <ResponseCard
-          key={index}
-          data={item}
-          surveyName="Formigo feedback"
-        />
-      ))}
+    <div className='mt-12 flex w-[770px] flex-col gap-6'>
+      {responses.length != 0 ? (
+        responses.map((item, index) => (
+          <ResponseCard
+            key={index}
+            data={{
+              name: item.anonymous ? 'Anonymous' : item.respondent,
+              date: item.createdAt,
+              id: item.responseId,
+            }}
+            surveyName={item.surveyName}
+          />
+        ))
+      ) : (
+        <div className='flex h-[114px] w-full items-center justify-center gap-4 rounded-md border border-border bg-card'>
+          <p className='text-base font-medium text-txt-secondary'>
+            You dont have yet any form response
+          </p>
+        </div>
+      )}
     </div>
   );
 }

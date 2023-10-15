@@ -1,22 +1,27 @@
 import express from "express";
-import userRoutes from "./user.route";
+import authRoutes from "./auth.route";
 import formRoutes from "./form.route";
 import responseRoutes from "./response.route";
+import userRoutes from "./user.route";
 
 const router = express.Router();
 
 const defaultRoutes = [
   {
     path: "/auth",
-    route: userRoutes,
+    route: authRoutes,
   },
   {
     path: "/forms",
     route: formRoutes,
   },
   {
-    path: "/response",
+    path: "/responses",
     route: responseRoutes,
+  },
+  {
+    path: "/user",
+    route: userRoutes,
   },
 ];
 

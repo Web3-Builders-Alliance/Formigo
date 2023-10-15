@@ -167,7 +167,8 @@ export const responseForm = async (req: Request, res: Response) => {
       iv,
       anonymous,
       formCreator: formFound.creator,
-      surveyName: formFound.name
+      surveyName: formFound.name,
+      ecPub: ecPubkey,
     });
 
     return res.status(201).json({
@@ -241,6 +242,45 @@ export const getResponseById = async (req: IUserRequest, res: Response) => {
         status: false,
         data: null,
         message: "No respondent was found",
+        code: 404,
+      });
+    }
+  } catch (error: any) {
+    return res.status(500).json({
+      data: null,
+      message: error.message,
+      status: false,
+    });
+  }
+};
+
+export const getResponseChunks = async (req: Request, res: Response) => {
+  try {
+    const responseId = req.params.responseId;
+
+    const response = await Respondent.findOne({
+      responseId,
+    });
+
+    if (response) {
+      let chunks = await ResponseChunk.find({ responseId }).sort({
+        part: 1,
+      });
+      let chunksArray = chunks.map((item) => item.chunk);
+
+      let joinedChunks = chunksArray.join("");
+
+      return res.status(200).json({
+        status: true,
+        data: { response, encryptedResponse: joinedChunks },
+        message: "Response chunk successfully retrieved.",
+        code: 200,
+      });
+    } else {
+      return res.status(404).json({
+        status: false,
+        data: null,
+        message: "No form was found",
         code: 404,
       });
     }

@@ -1,18 +1,7 @@
 "use client";
 
-import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
-import { formatDistanceToNow } from "date-fns";
-import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import {
-  Sheet,
-  SheetTrigger,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
-} from "../ui/sheet";
 
 type TextAnswerProps = {
   index: number | 0;
@@ -33,10 +22,10 @@ export default function TextAnswerCard({ index, info }: TextAnswerProps) {
       </div>
       <div className="flex items-center justify-between border-t border-t-border p-5">
         <p className="text-sm text-txt-secondary">
-          Since this is a text-based response, we are unable to furnish a top
-          answer or summary.
+          Since this is a text-based question, no choices to be display.
         </p>
-        <Sheet>
+        <p></p>
+        {/* <Sheet>
           <SheetTrigger className="transition-colors border font-semibold text-txt-secondary bg-transparent shadow-sm hover:bg-btn-secondary hover:text-txt px-4 py-2.5 rounded-md">
             Summary
           </SheetTrigger>
@@ -67,7 +56,7 @@ export default function TextAnswerCard({ index, info }: TextAnswerProps) {
               </div>
             </div>
           </SheetContent>
-        </Sheet>
+        </Sheet> */}
       </div>
     </div>
   );

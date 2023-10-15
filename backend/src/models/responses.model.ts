@@ -8,7 +8,8 @@ export interface IRespondent extends Document {
   formCreator:string
   responseId: string;
   anonymous: boolean;
-  iv:string
+  iv:string,
+  ecPub: string
 }
 
 const responseSchema = new mongoose.Schema(
@@ -21,6 +22,7 @@ const responseSchema = new mongoose.Schema(
     anonymous: { type: Boolean, required: true },
     formCreator:{ type: String, required: true },
     surveyName:{ type: String, required: true },
+    ecPub: { type: String, required: true }
   },
   { timestamps: true }
 );

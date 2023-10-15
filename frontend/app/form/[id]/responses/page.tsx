@@ -1,9 +1,13 @@
 import FormResponseTab from "@/components/responses";
+import getResponses from "@/hooks/getResponses";
 
-export default function FormResponse() {
+export default async function FormResponse() {
+  const responses = await getResponses()
+  
+  
   return (
     <>
-      <FormResponseTab />
+      <FormResponseTab responses={responses} />
     </>
   );
 }

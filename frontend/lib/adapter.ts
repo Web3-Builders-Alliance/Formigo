@@ -12,7 +12,7 @@ export type ConnectedMethods = {
 
 type SignedMessage = {
   signature: Uint8Array | null;
-  publicKey: string;
+  publicKey: string |  null | PublicKey
 };
 
 interface Props {

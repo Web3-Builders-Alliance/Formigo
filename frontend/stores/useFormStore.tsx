@@ -40,42 +40,34 @@ const initialState = {
   formOverview: null,
 };
 
-const useFormStore = create<FormState>()(
-  persist(
-    (set) => ({
-      ...initialState,
-      clearFormStore: () => set(initialState),
-      setFormOverview: (
-        name: string | null,
-        description: string | null,
-        validation: string | null,
-        theme: string | 'dark' | 'white',
-        walletAddress: string[] | null,
-        programAddress: string | null,
-        amount: number | string | null
-      ) =>
-        set((state) => ({
-          formOverview: {
-            name,
-            description,
-            validation,
-            theme,
-            walletAddress,
-            programAddress,
-            amount,
-          },
-        })),
-      setFormData: (index, data) =>
-        set((state) => {
-          const newFormData: any = [...state.formData];
-          newFormData[index] = data;
-          return { formData: newFormData };
-        }),
+const useFormStore = create<FormState>()((set) => ({
+  ...initialState,
+  clearFormStore: () => set(initialState),
+  setFormOverview: (
+    name: string | null,
+    description: string | null,
+    validation: string | null,
+    theme: string | 'dark' | 'white',
+    walletAddress: string[] | null,
+    programAddress: string | null,
+    amount: number | string | null
+  ) =>
+    set((state) => ({
+      formOverview: {
+        name,
+        description,
+        validation,
+        theme,
+        walletAddress,
+        programAddress,
+        amount,
+      },
+    })),
+  setFormData: (index, data) =>
+    set((state) => {
+      const newFormData: any = [...state.formData];
+      newFormData[index] = data;
+      return { formData: newFormData };
     }),
-    {
-      name: 'formpreview',
-      getStorage: () => localStorage,
-    }
-  )
-);
+}));
 export default useFormStore;

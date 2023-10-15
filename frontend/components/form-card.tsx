@@ -17,7 +17,7 @@ import { useRouter } from 'next/navigation';
 type Props = {
   name: string;
   formId: string;
-  status: 'active' | 'draft' | 'archive';
+  status: 'active' | 'draft' | 'archive' | 'disable';
 };
 
 export default function FormCard({ name, status, formId }: Props) {
@@ -37,7 +37,7 @@ export default function FormCard({ name, status, formId }: Props) {
               className='font-sans text-base'
               onClick={() => router.push(`/form/${formId}`)}
             >
-              Overview
+              Questions
             </DropdownMenuItem>
             <DropdownMenuItem
               className='font-sans text-base'
