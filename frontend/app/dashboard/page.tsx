@@ -1,37 +1,17 @@
 import BlankCard from '@/components/blank-card';
 import CreateForm from '@/components/create-form';
-import DashboardAnalytics from '@/components/dashboard-analytics';
-import DashboardSelect from '@/components/dashboard-select';
 import FormCard from '@/components/form-card';
-import CarbonViewFilled from '@/components/icons/CarbonViewFilled';
-import FluentFormFilled from '@/components/icons/FluentFormFilled';
-import MDIListBox from '@/components/icons/MDIListBox';
 import ResponseCard from '@/components/responses/response-card';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import getForms from '@/hooks/getForms';
 import getResponses from '@/hooks/getResponses';
-import { api } from '@/lib/axios';
-import { SelectGroup } from '@radix-ui/react-select';
-import axios from 'axios';
-import Image from 'next/image';
 import Link from 'next/link';
 import {
-  IoArrowDown,
   IoArrowForward,
-  IoArrowUp,
-  IoChevronDown,
 } from 'react-icons/io5';
 
 export default async function Dashboard() {
   const forms = await getForms();
   const responses = await getResponses();
-  console.log(forms);
   
   return (
     <main className='flex min-h-screen flex-col justify-start gap-8 px-[135px] py-16 font-sans xl:px-[240px]'>
