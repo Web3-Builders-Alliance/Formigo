@@ -1,5 +1,6 @@
 import SettingTab from '@/components/settings';
 import getFormById from '@/hooks/getFormById';
+import { notFound } from 'next/navigation';
 
 type Data = {
   form: {
@@ -8,6 +9,7 @@ type Data = {
     name: string;
     status: string;
   };
+  txIds: []
 };
 
 export default async function FormSetting({
@@ -16,10 +18,10 @@ export default async function FormSetting({
   params: { id: string };
 }) {
   const data: Data = await getFormById(params.id);
-
+  if (!data || data.hasOwnProperty('response')) notFound();
   return (
     <>
-      <SettingTab data={data.form} />
+      <SettingTab data={data.form} txIds={data.txIds} />
     </>
   );
 }

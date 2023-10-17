@@ -21,6 +21,7 @@ import { getAnonSharedKey } from '@/lib/ec';
 import { encrypt } from '@/lib/encrypt';
 import axios from 'axios';
 import { ReloadIcon } from '@radix-ui/react-icons';
+import Link from 'next/link';
 
 interface AnswerItem {
   answer: string | null;
@@ -54,7 +55,8 @@ export default function PublishedForm({
   formId: string;
 }) {
   const { toast } = useToast();
-  const [wallet, setWallet] = useState('');
+  const [wallet, setWallet] = useState(null);
+  const [txid, setTxid] = useState(null);
 
   const [questionStep, setQuestionStep] = useState<number>(0);
   const [answers, setAnswers] = useState<AnswerItem[]>([
@@ -108,7 +110,8 @@ export default function PublishedForm({
           },
         }
       )
-      .then(() => {
+      .then((data) => {
+        setTxid(data.data.data.responseTxids[0]);
         setDone(true);
         setIsLoading(false);
       })
@@ -361,7 +364,17 @@ export default function PublishedForm({
               Form complete!
             </Label>
             <p className='font-sans text-base font-medium text-txt-secondary'>
-              Thank you for taking part of {formData?.name} survey
+              Thank you for taking part of {formData?.name}.
+            </p>
+            <p className='font-sans text-base font-medium text-txt-secondary'>
+              {'You can check your response transaction'}{' '}
+              <Link
+              target='_blank'
+               className='text-blue-600 underline'
+                href={`https://explorer.solana.com/tx/${txid}?cluster=${process.env.NEXT_PUBLIC_EXPLORER_CLUSTER}`}
+              >
+                here
+              </Link>
             </p>
             <p className='font-sans text-base font-medium text-txt-secondary'>
               You may now close this page

@@ -1,4 +1,6 @@
+import { authOptions } from '@/lib/authOptions';
 import { api } from '@/lib/axios';
+import { getServerSession } from 'next-auth';
 import { cookies } from 'next/headers';
 import { type NextRequest } from 'next/server';
 
@@ -7,13 +9,12 @@ export async function PATCH(
   { params }: { params: { slug: string } }
 ) {
   const payload = await req.json();
-  const nextCookies = cookies();
-  const token = nextCookies.get('auth');
+  const session = await getServerSession(authOptions);
 
   try {
     const { data } = await api.patch(`/api/forms/${params.slug}`, payload, {
       headers: {
-        Authorization: `Bearer ${token?.value}`,
+        Authorization: `Bearer ${session?.token}`,
         'Content-Type': 'application/json',
       },
     });

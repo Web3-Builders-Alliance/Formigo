@@ -15,7 +15,7 @@ export default async function Forms() {
   const forms = await getForms();
   return (
     <main className='flex min-h-screen flex-col px-[135px] py-16 font-sans xl:px-[240px]'>
-      <div className='flex flex-col gap-1.5'>
+      <div className='flex flex-col gap-1.5 mb-6'>
         <h1 className='text-[28px] font-semibold leading-9'>Forms</h1>
         <h2 className='text-txt-secondary'>
           {"Here, you can see all the forms you've generated."}

@@ -1,4 +1,6 @@
+import { authOptions } from '@/lib/authOptions';
 import { api } from '@/lib/axios';
+import { getServerSession } from 'next-auth';
 import { cookies } from 'next/headers';
 import { NextRequest } from 'next/server';
 
@@ -10,13 +12,12 @@ type Payload = {
 };
 
 export async function GET() {
-  const nextCookies = cookies();
-  const token = nextCookies.get('auth');
+  const session = await getServerSession(authOptions);
 
   try {
     const { data } = await api.get('/api/forms', {
       headers: {
-        Authorization: `Bearer ${token?.value}`,
+        Authorization: `Bearer ${session?.token}`,
         'Content-Type': 'application/json',
       },
     });
@@ -35,13 +36,12 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const payload: Payload = await req.json();
-  const nextCookies = cookies();
-  const token = nextCookies.get('auth');
+  const session = await getServerSession(authOptions);
 
   try {
     const { data } = await api.post('/api/forms', payload, {
       headers: {
-        Authorization: `Bearer ${token?.value}`,
+        Authorization: `Bearer ${session?.token}`,
         'Content-Type': 'application/json',
       },
     });

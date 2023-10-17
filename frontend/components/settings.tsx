@@ -16,14 +16,29 @@ type Form = {
   status: string;
 };
 
-export default function SettingTab({ data }: { data: Form }) {
+type Txids = {
+  txId: string;
+};
+
+export default function SettingTab({
+  data,
+  txIds,
+}: {
+  data: Form;
+  txIds: Txids[];
+}) {
   const pathname = usePathname();
   let parts = pathname.split('/');
   const domain = process.env.NEXT_PUBLIC_APP_DOMAIN;
+  const cluster = process.env.NEXT_PUBLIC_EXPLORER_CLUSTER;
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState(data?.status);
   const [link, setLink] = useState(`${domain}/${parts[2]}`);
+  const [txidCopied, setTxidCopied] = useState(false);
+  const [explorerLink, setExplorerLink] = useState(
+    `https://explorer.solana.com/tx/${txIds[0].txId}?cluster=${cluster}`
+  );
   const [copied, setCopied] = useState(false);
   async function disableForm() {
     setIsLoading(true);
@@ -99,6 +114,31 @@ export default function SettingTab({ data }: { data: Form }) {
               }}
             >
               {copied ? (
+                <IoCheckmarkDone className='h-5 w-5' />
+              ) : (
+                <IoCopyOutline className='h-5 w-5' />
+              )}
+            </div>
+          </div>
+        </div>
+        <div className='flex w-full flex-col gap-2 p-5'>
+          <Label>Form creation transaction</Label>
+          <div className='flex items-center justify-between truncate rounded-md border  border-border bg-btn-secondary px-4 py-3 text-sm'>
+            <p>{`https://explorer.solana.com/tx/${txIds[0].txId.slice(
+              0,
+              9
+            )}...${txIds[0].txId.slice(
+              txIds[0].txId.length - 12,
+              txIds[0].txId.length
+            )}?cluster=${cluster}`}</p>
+            <div
+              className='cursor-pointer'
+              onClick={() => {
+                setTxidCopied(true);
+                navigator.clipboard.writeText(explorerLink);
+              }}
+            >
+              {txidCopied ? (
                 <IoCheckmarkDone className='h-5 w-5' />
               ) : (
                 <IoCopyOutline className='h-5 w-5' />

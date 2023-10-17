@@ -64,7 +64,7 @@ export default function NavEditor() {
               'Your form has been successfully created and uploaded to the ledger!',
           });
 
-          router.push(`/form/${data.data.data.formId}`);
+          router.push(`/form/${data.data.data.form.formId}`);
         })
         .catch(() => {
           setLoading(false);

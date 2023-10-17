@@ -1,23 +1,17 @@
-'use client'
+'use client';
+import CheckAuthProvider from '@/components/auth-checker';
 import Footer from '@/components/footer';
 import Navbar from '@/components/navbar';
-import useGetMe from '@/hooks/useGetMe';
 
-export default function Layout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const { isLoading ,data } = useGetMe();
-  
-  
 
-  if (isLoading || !data) return <p>Loading...</p>;
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className='flex min-h-screen flex-col'>
-      <Navbar />
-      {children}
-      <Footer />
-    </div>
+    <CheckAuthProvider>
+      <div className='flex min-h-screen flex-col'>
+        <Navbar />
+        {children}
+        <Footer />
+      </div>
+    </CheckAuthProvider>
   );
 }
