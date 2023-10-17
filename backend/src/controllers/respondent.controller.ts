@@ -113,6 +113,8 @@ export const responseForm = async (req: Request, res: Response) => {
       const chunk = encryptedResponse.slice(startIndex, endIndex);
       chunks.push(chunk);
     }
+
+    let responseTxids = []
     for (let i = 0; i < chunks.length; i++) {
       let txSuccess = false;
       const bufferData = Buffer.from(chunks[i]);
@@ -152,6 +154,8 @@ export const responseForm = async (req: Request, res: Response) => {
             chunk: chunks[i],
           });
 
+          responseTxids.push(txId)
+
           break;
         }
         // Check again after 1 sec
@@ -172,7 +176,7 @@ export const responseForm = async (req: Request, res: Response) => {
     });
 
     return res.status(201).json({
-      data: respondentObj,
+      data: {responses:respondentObj, responseTxids},
       message: "Response recorded successfully.",
       status: true,
     });
@@ -281,6 +285,60 @@ export const getResponseChunks = async (req: Request, res: Response) => {
         status: false,
         data: null,
         message: "No form was found",
+        code: 404,
+      });
+    }
+  } catch (error: any) {
+    return res.status(500).json({
+      data: null,
+      message: error.message,
+      status: false,
+    });
+  }
+};
+
+export const getResponsesByFormId = async (
+  req: IUserRequest,
+  res: Response
+) => {
+  try {
+    const formId = req.params.formId;
+
+    const user = req.user;
+
+    const form = await Form.findOne({ formId });
+
+    if (form) {
+      if (form.creator === user.pubkey) {
+        const allResponse = await Respondent.find({ formId });
+        if (allResponse.length != 0) {
+          return res.status(200).json({
+            data: allResponse,
+            message: "Form responses retrived",
+            status: true,
+            code: 200,
+          });
+        } else {
+          return res.status(404).json({
+            data: [],
+            message: "No form responses",
+            status: false,
+            code: 404,
+          });
+        }
+      } else {
+        return res.status(401).json({
+          data: [],
+          message: "Unauthorized to access this form responses",
+          status: true,
+          code: 400,
+        });
+      }
+    } else {
+      return res.status(404).json({
+        data: [],
+        message: "No form found",
+        status: false,
         code: 404,
       });
     }

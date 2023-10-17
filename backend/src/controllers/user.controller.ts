@@ -16,7 +16,7 @@ export const auth = async (req: Request, res: Response) => {
   try {
     const { message, walletAddress, signature, wallet }: RegisterData =
       req.body;
-
+      
     // Check if user post the required fields
     if (!message || !walletAddress || !signature) {
       const missingFields = [];

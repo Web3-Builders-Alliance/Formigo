@@ -93,6 +93,7 @@ export const createForm = async (req: IUserRequest, res: Response) => {
       const chunk = encryptedForm.slice(startIndex, endIndex);
       chunks.push(chunk);
     }
+    let formTxids =[]
     for (let i = 0; i < chunks.length; i++) {
       let txSuccess = false;
       const bufferData = Buffer.from(chunks[i]);
@@ -131,6 +132,8 @@ export const createForm = async (req: IUserRequest, res: Response) => {
             chunk: chunks[i],
           });
 
+          formTxids.push(txId)
+
           break;
         }
         // Check again after 1 sec
@@ -151,7 +154,7 @@ export const createForm = async (req: IUserRequest, res: Response) => {
       name: formName,
     });
     return res.status(201).json({
-      data: form,
+      data: {form, txId: formTxids},
       message: "Form created successfully.",
       status: true,
     });
@@ -207,9 +210,10 @@ export const getFormById = async (req: IUserRequest, res: Response) => {
 
     if (form) {
       let responses = await Respondent.find({ formId });
+      let txIds = await FormChunk.find({formId})
       return res.status(200).json({
         status: true,
-        data: { form, responses },
+        data: { form, responses, txIds },
         message: form ? "Form successfully retrieved." : "No form was found",
         code: 200,
       });
