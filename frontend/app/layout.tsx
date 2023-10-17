@@ -3,6 +3,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Inter, Montserrat } from 'next/font/google';
 import { Toaster } from '@/components/ui/toaster';
+import { NextAuthProvider } from '@/components/session-provider';
 
 export const metadata: Metadata = {
   title: 'Formigo',
@@ -26,15 +27,17 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={`${inter.variable} ${montserrat.variable}`}>
-        <Toaster />
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='dark'
-          enableSystem={false}
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        <NextAuthProvider>
+          <Toaster />
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='dark'
+            enableSystem={false}
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </NextAuthProvider>
       </body>
     </html>
   );

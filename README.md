@@ -40,3 +40,15 @@ By: Raymart Mabag and Joseph Caballero
 ---
 
 ###
+
+### Future development
+1. Quiz forms.
+2. Document fillable forms.
+3. NFT/token gating forms.
+4. Account control for magic.link users.
+5. EVM lookup for token/nft gating forms.
+
+
+---
+
+###

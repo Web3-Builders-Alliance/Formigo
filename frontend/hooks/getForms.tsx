@@ -1,14 +1,13 @@
+import { authOptions } from '@/lib/authOptions';
 import { api } from '@/lib/axios';
-import { cookies } from 'next/headers';
+import { getServerSession } from 'next-auth';
 
 export default async function getForms() {
-  const nextCookies = cookies();
-  const token = nextCookies.get('auth');
-
+  const session = await getServerSession(authOptions);
   try {
     const { data } = await api.get('/api/forms', {
       headers: {
-        Authorization: `Bearer ${token?.value}`,
+        Authorization: `Bearer ${session?.token}`,
         'Content-Type': 'application/json',
       },
     });

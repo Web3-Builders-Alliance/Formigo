@@ -21,9 +21,11 @@ import { magic } from '@/lib/magic';
 import useMagicStore from '@/stores/useMagicStore';
 import axios from 'axios';
 import { decodeUTF8 } from 'tweetnacl-util';
-import { useState } from 'react';
+import { ReactEventHandler, useState } from 'react';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import useUserStore from '@/stores/useUserStore';
+import { signIn } from 'next-auth/react';
+import { generateKeyMessage } from '@/lib/generateMessage';
 
 export default function MagicInput() {
   const router = useRouter();
@@ -42,34 +44,27 @@ export default function MagicInput() {
   });
 
   const login = async () => {
-    //TODO: Need enhancement and cleanup
     try {
       setLoading(true);
       await magic.auth.loginWithEmailOTP(form.getValues());
-      const usermagic = await magic.user.getMetadata();
+      const usermagic = await magic.user.getInfo();
 
       const walletAdd = new web3.PublicKey(usermagic.publicAddress as string);
-      const message = 'Hello';
+      const message = generateKeyMessage(usermagic.publicAddress);
       const encodedMsg = decodeUTF8(message);
       const signature = await magic.solana.signMessage(encodedMsg);
 
       setUser(usermagic);
       setWallet(walletAdd);
 
-      let data = await axios.post(
-        '/api/auth/',
-        {
-          walletAddress: usermagic.publicAddress,
-          message,
-          signature,
-          wallet: 'magic',
-        },
-        {
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
-      if (data.status == 200 || data.status == 201) {
-        setLoginUser(usermagic.publicAddress);
+      let signInData = await signIn('credentials', {
+        walletAddress: usermagic.publicAddress,
+        signature,
+        message,
+        wallet: 'magic',
+        redirect: false,
+      });
+      if (signInData?.ok) {
         router.push('/dashboard');
       }
 

@@ -1,21 +1,21 @@
+import { authOptions } from '@/lib/authOptions';
 import { api } from '@/lib/axios';
-
-import { cookies } from 'next/headers';
+import { getServerSession } from 'next-auth';
 
 export async function GET() {
-  const nextCookies = cookies();
-  const token = nextCookies.get('auth');
+  const session = await getServerSession(authOptions);
+  
   try {
     const { data } = await api.get('/api/auth/me', {
       headers: {
-        Authorization: `Bearer ${token?.value}`,
+        Authorization: `Bearer ${session?.token}`,
         'Content-Type': 'application/json',
       },
     });
 
     return Response.json({ data }, { status: 200 });
   } catch (error: any) {
-    nextCookies.delete('auth');
+    
 
     return Response.json(
       { data: null, message: error.message },

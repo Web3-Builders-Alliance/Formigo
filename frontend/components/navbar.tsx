@@ -5,15 +5,21 @@ import { Avatar, AvatarFallback } from './ui/avatar';
 import { usePathname, useRouter } from 'next/navigation';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import useUserStore from '@/stores/useUserStore';
+import { signOut, useSession } from 'next-auth/react';
+import { magic } from '@/lib/magic';
 
 const Navbar = () => {
-  const logout = useUserStore((state) => state.logout);
+  const { data } = useSession();
+
   const user = useUserStore((state) => state.user);
   const pathname = usePathname();
   const router = useRouter();
-  const logoutRedirect = () => {
-    logout();
-    router.push('/');
+  const logout = async () => {
+    let usingMagic = await magic.user.isLoggedIn();
+    if (usingMagic) {
+      await signOut({ callbackUrl: '/' });
+      await magic.user.logout();
+    }
   };
   return (
     <nav className='sticky top-0 flex h-[70px] w-full items-center justify-between border border-b-border bg-card px-[135px] py-3.5 xl:px-[240px]'>
@@ -44,12 +50,12 @@ const Navbar = () => {
         <PopoverTrigger>
           <Avatar>
             <AvatarFallback className='cursor-pointer'>
-              {user?.charAt(0).toUpperCase()}
+              {data?.user.base58Address?.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
         </PopoverTrigger>
         <PopoverContent>
-          <div className='flex w-full items-center' onClick={logoutRedirect}>
+          <div className='flex w-full items-center' onClick={logout}>
             <IoLogOut className='mr-2 h-5 w-5' />
             <p className='cursor-pointer font-sans font-medium text-txt'>
               Logout

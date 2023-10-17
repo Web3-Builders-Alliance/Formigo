@@ -13,9 +13,11 @@ export default function FormResponseTab({
 }: {
   responses: Responses[];
 }) {
+  console.log("d",responses);
+  
   return (
     <div className='mt-12 flex w-[770px] flex-col gap-6'>
-      {responses.length != 0 ? (
+      {responses && responses.length != 0 ? (
         responses.map((item, index) => (
           <ResponseCard
             key={index}

@@ -3,6 +3,7 @@ import {
   getAllResponse,
   getResponseById,
   getResponseChunks,
+  getResponsesByFormId,
   responseForm,
 } from "../controllers/respondent.controller";
 import rateLimit from "express-rate-limit";
@@ -27,6 +28,7 @@ const createAccountLimiter = rateLimit({
 router.post("/", createAccountLimiter, responseForm);
 router.get("/", authenticateToken, getAllResponse);
 router.get("/:responseId", authenticateToken, getResponseById);
+router.get("/form/:formId", authenticateToken, getResponsesByFormId);
 router.get("/chunks/:responseId", authenticateToken, getResponseChunks);
 
 export default router;
