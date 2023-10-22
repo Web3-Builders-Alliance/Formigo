@@ -1,5 +1,6 @@
 import { authOptions } from '@/lib/authOptions';
 import { api } from '@/lib/axios';
+import { sleep } from '@/lib/sleep';
 import { getServerSession } from 'next-auth';
 
 export default async function getResponses() {
@@ -12,6 +13,7 @@ export default async function getResponses() {
         'Content-Type': 'application/json',
       },
     });
+    await sleep(500)
     return data.data;
   } catch (error) {
     return error;
