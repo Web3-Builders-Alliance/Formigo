@@ -175,7 +175,7 @@ export const getAllForms = async (req: IUserRequest, res: Response) => {
       walletAddress: user.pubkey.toLowerCase(),
     });
 
-    const forms = await Form.find({ creator: userFound?.base58Address });
+    const forms = await Form.find({ creator: userFound?.base58Address }).sort({createdAt: -1});
     return res.status(200).json({
       status: true,
       data: forms,

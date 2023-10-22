@@ -199,7 +199,7 @@ export const getAllResponse = async (req: IUserRequest, res: Response) => {
 
     const respondent = await Respondent.find({
       formCreator: userFound?.base58Address,
-    });
+    }).sort({createdAt: -1});
     return res.status(200).json({
       status: true,
       data: respondent,
@@ -310,7 +310,7 @@ export const getResponsesByFormId = async (
 
     if (form) {
       if (form.creator === user.pubkey) {
-        const allResponse = await Respondent.find({ formId });
+        const allResponse = await Respondent.find({ formId }).sort({createdAt: -1});
         if (allResponse.length != 0) {
           return res.status(200).json({
             data: allResponse,
