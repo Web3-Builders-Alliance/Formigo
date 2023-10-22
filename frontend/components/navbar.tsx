@@ -22,7 +22,7 @@ const Navbar = () => {
     }
   };
   return (
-    <nav className='sticky top-0 flex h-[70px] w-full items-center justify-between border border-b-border bg-card px-[135px] py-3.5 xl:px-[240px]'>
+    <nav className='sticky z-10 top-0 flex h-[70px] w-full items-center justify-between border border-b-border bg-card px-[135px] py-3.5 xl:px-[240px]'>
       <div className='flex cursor-pointer items-center gap-2 text-txt-secondary hover:text-txt'>
         <Button variant='secondary' className='text-txt'>
           F
@@ -41,6 +41,12 @@ const Navbar = () => {
           variant={pathname == '/forms' ? 'ghost-active' : 'ghost'}
         >
           Forms
+        </Button>
+        <Button
+          onClick={() => router.push('/responses')}
+          variant={pathname == '/responses' ? 'ghost-active' : 'ghost'}
+        >
+          Responses
         </Button>
         {/* <Button variant='ghost'>
           Account <IoChevronDown className='ml-2.5 h-5 w-5' />
