@@ -8,6 +8,10 @@ export const authOptions: NextAuthOptions = {
     signIn: '/',
     error: '/',
   },
+  session: {
+    strategy: 'jwt',
+    maxAge: 7 * 60 * 60 // 7 hours
+  },
   callbacks: {
     async jwt({ token, user }) {
       return { ...token, ...user };
